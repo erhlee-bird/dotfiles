@@ -1,0 +1,61 @@
+" Base16 Vim {"{{{
+    " Configure Base16 colorscheme
+    if isdirectory(expand("~/.vim/bundle/base16-vim/"))
+        let base16colorspace=256
+        set t_Co=256
+        set background=dark
+        colorscheme base16-ocean
+    endif
+" }"}}}
+
+" NERDTree {"{{{
+    if isdirectory(expand("~/.vim/bundle/nerdtree/"))
+        " Show hidden files in NERDTree
+        let NERDTreeShowHidden=1
+        " Closes NERDTree after you've selected a file
+        let NERDTreeQuitOnOpen=1
+        " Tell NERDTree where to store its bookmarks
+        let NERDTreeBookmarksFile="~/.vim/bundle/NERDTreeBookmarks"
+        " Hide unnecessary UI features
+        let NERDTreeMinimalUI=1
+        " Single click on the nodes
+        let NERDTreeMouseMode=3
+        " Change directories in the NERDTree with >
+        let NERDTreeMapChangeRoot=">"
+        " Move to parent directory in NERDTree with <
+        let NERDTreeMapUpdir="<"
+
+        noremap <Leader>e :NERDTreeToggle<CR>
+    endif
+" }"}}}
+
+" ctrlp {"{{{
+    if isdirectory(expand("~/.vim/bundle/ctrlp.vim/"))
+        " Change the keybinding to invoke CtrlP
+        let g:ctrlp_map='<Leader><Space>'
+        " Work with the nearest version controlled ancestor or current dir
+        let g:ctrlp_working_path_mode='ra'
+        " Match files from top to bottom
+        let g:ctrlp_match_window='bottom,order:ttb'
+        " Custom ignore
+        let g:ctrlp_custom_ignore = {
+            \ 'dir': '\v/.git$',
+            \ 'file': '\v(' .
+                    \ '(^|\/)([^\.]+)$' . '|' .
+                    \ '\.(o|dep)$' .
+                    \ ')'
+            \ }
+
+        nnoremap <Leader>b :CtrlPBuffer<CR>
+        nnoremap <Leader>m :CtrlPMRUFiles<CR>
+    endif
+" }"}}}
+
+" syntastic {"{{{
+    if isdirectory(expand("~/.vim/bundle/syntastic/"))
+        " Check on buffer open
+        let g:syntastic_check_on_open = 1
+
+        let g:syntastic_python_checkers = ["flake8"]
+    endif
+" }"}}}
