@@ -1,0 +1,7 @@
+[init]
+	defaultBranch = master
+[pull]
+    rebase = false
+[user]
+	email = erhlee.bird@gmail.com
+	name = Eric Lee
