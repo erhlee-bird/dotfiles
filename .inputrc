@@ -1,0 +1,10 @@
+set colored-stats On
+set completion-ignore-case On
+set completion-map-case On
+set expand-tilde On
+# Every completion which is a symbolic link to a directory will have a slash 
+# appended.
+set mark-symlinked-directories On
+set page-completions Off
+set show-all-if-ambiguous On
+set show-all-if-unmodified On

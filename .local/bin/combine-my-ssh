@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+if [[ ! -d "${HOME}/.ssh/conf.d" ]]; then
+  echo "No ssh config files available for writing."
+  exit 1
+fi
+
+sorted_config_files="$(ls -dr "${HOME}/.ssh/conf.d/*")"
+if [[ ! -z "${sorted_config_files}" ]]; then
+  echo "Combining all ssh config files available in ~/.ssh/conf.d/"
+  cat ${sorted_config_files} > "${HOME}/.ssh/config_combined"
+  ln -fs "${HOME}/.ssh/config_combined" "${HOME}/.ssh/config"
+  chmod 600 "${HOME}/.ssh/config"
+else
+  echo "No configuration files to combine."
+fi

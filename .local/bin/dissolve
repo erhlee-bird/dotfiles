@@ -1,0 +1,90 @@
+#!/usr/bin/env bash
+#*****************************************************************************#
+# Script:        dissolve                                                     #
+# Purpose:       If given a folder with files or folders inside, be able to   #
+#                go inside and bring all the contents up to the parent folder #
+#                and delete the target folder. Optional Recursive Usage       #
+# Author:        Eric H. Lee (erhlee.bird@gmail.com)                          #
+# Creation Date: 05/07/11                                                     #
+# Project:       Bash                                                         #
+#*****************************************************************************#
+function show_help {
+	echo -e "Usage: $0
+	-r	Recursively Dissolves all subfolders
+	-f	Forcefully dissolve folders"
+    exit 0
+}
+
+function die { echo $1 >&2; exit 1; }
+
+RECURSE=""
+FORCE=""
+TARGET=""
+
+optspec=":rfh"
+while getopts "$optspec" opt; do
+	case "${opt}" in
+		r)	RECURSE="-r";;
+		f)	FORCE="-f";;
+		h)	show_help;;
+		*)	echo "Invalid option: -$OPTARG" >&2;
+			show_help;;
+	esac
+done
+
+shift $((OPTIND-1))
+TARGET="$@"
+# If there is no argument given, show the help
+if [ -z "$TARGET" ]; then show_help; fi
+
+# Check if the given target exists and is a directory.
+if [ ! -d "$TARGET" ]; then die "$TARGET: Directory doesn't exist"; fi
+
+# God forbid.
+if [ "$TARGET" = "/" ]; then die "Don't do that"; fi
+
+# If we aren't forcing the dissolve, prompt the user
+if [ -z "$FORCE" ]; then
+	# Check if they really want to dissolve the target.
+	read -p "Are you sure you want to dissolve $TARGET? " -n 1
+	# Exit if they don't type something that starts with 'y'.
+	if [[ ! $REPLY =~ ^[Yy]$ ]]; then die; fi
+	echo
+fi
+
+# Just delete it if it's an empty directory
+if ! [ "$(ls -A $TARGET)" ]; then rmdir "$TARGET"; exit 0; fi
+
+# If there's a path separator at the end of the argument, remove it.
+TARGET="${TARGET%/}"
+
+# Loops through the files in the target directory and moves them up to
+# the parent directory. If the recursive option is enabled, recurses
+# through all subdirectories as well.
+for file in "$TARGET"/*; do
+	# Strip the filename back out of the pattern
+	file="${file##*/}"
+
+	# If a file of the same name already exists in the parent directory,
+	# append zeroes to its name until there is no conflict.
+	if [ -e "$TARGET/../$file" ]; then
+		nfile="$file"
+		while [ -e "$TARGET/../$nfile" ]; do nfile="$nfile"0; done
+		mv "$TARGET/../$file" "$TARGET/../$nfile"
+		if [ "$TARGET" = "$file" ]; then TARGET="$nfile"; fi
+	fi
+
+	# Actually move the child file to the parent folder.
+	mv "$TARGET/$file" "$TARGET/../$file"
+
+	# Recurse on child directories if need be.
+	if [ -d "$file" -a "$RECURSE" = "-r" ]; then
+		#Call dissolve on the subdirectories.
+		TEST="$TARGET/../$file"
+		RESULT="${TEST##*/}"
+		$0 "$RECURSE" "$FORCE" "$TARGET/../$file"
+	fi
+done
+
+#Once done, deletes the now-empty target directory.
+rmdir $TARGET;

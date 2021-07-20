@@ -1,0 +1,10 @@
+_edit()
+{
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+
+    local opts=$(find $(git_dir) -ipath "*$cur*")
+
+    COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+    return 0
+}
+complete -o filenames -F _edit edit
