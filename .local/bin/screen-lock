@@ -1,0 +1,14 @@
+#!/bin/sh
+
+export PATH="${PATH}:/run/current-system/sw/bin/"
+
+echo "Locked at $(date)"
+betterlockscreen -l dim &
+pid=$$
+
+until ! kill -0 $pid || fprintd-verify; do
+  echo "Failed to verify fingerprint at $(date)"
+done
+
+echo "Unlocked at $(date)"
+killall i3lock-color
