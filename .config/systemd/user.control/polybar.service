@@ -3,9 +3,9 @@ Description=Polybar: Beautiful and Highly Customizable Status Bar
 
 [Service]
 ExecReload=kill -SIGUSR1 $MAINPID
-ExecStart=/run/current-system/sw/bin/polybar top
+ExecStart=/run/current-system/sw/bin/polybar -r top
 Restart=always
 Type=simple
 
 [Install]
-WantedBy=graphical.target
+WantedBy=default.target

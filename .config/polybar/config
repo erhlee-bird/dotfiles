@@ -1,10 +1,11 @@
 ;;; Colors
 
 [colors]
-; baby-powder
-fg = #f0f4ef
-; independence
-bg = #344966
+baby-powder = #f0f4ef
+independence = #344966
+jet = #312f2f
+middle-blue-green = #84dccf
+uranian-blue = #a6d9f7
 
 ;;; Global
 
@@ -20,14 +21,16 @@ full-at = 98
 battery = BAT0
 adapter = AC
 poll-interval = 5
-format-discharging = <ramp-capacity> <label-discharging>
-label-charging =  %percentage%%
-label-full =  %percentage%%
-ramp-capacity-0 = 
-ramp-capacity-1 = 
-ramp-capacity-2 = 
-ramp-capacity-3 = 
-ramp-capacity-4 = 
+format-discharging = "<ramp-capacity> <label-discharging>"
+format-full-prefix = "%{F#0f0}"
+format-full-suffix = "%{F-}"
+label-charging = " %percentage%%"
+label-full = " %percentage%%"
+ramp-capacity-0 = ""
+ramp-capacity-1 = ""
+ramp-capacity-2 = ""
+ramp-capacity-3 = ""
+ramp-capacity-4 = ""
 
 [module/datetime]
 type = internal/date
@@ -40,12 +43,12 @@ label = " %date% %time%"
 type = internal/pulseaudio
 use-ui-max = true
 interval = 5
-format-volume = <ramp-volume> <label-volume>
-label-volume = %percentage%%
-ramp-volume-0 = 
-ramp-volume-1 = 
-ramp-volume-2 = 
-label-muted =  0%
+format-volume = "<ramp-volume> <label-volume>"
+label-volume = "%percentage%%"
+ramp-volume-0 = ""
+ramp-volume-1 = ""
+ramp-volume-2 = ""
+label-muted = " 0%"
 label-muted-foreground = #666
 click-right = pavucontrol
 
@@ -53,7 +56,10 @@ click-right = pavucontrol
 type = internal/network
 interface = wlp114s0
 interval = 3.0
-label-connected = " %essid%"
+label-connected = ""
+label-connected-foreground = ${colors.middle-blue-green}
+label-disconnected = ""
+label-disconnected-foreground = #666
 click-left = nm-connection-editor
 
 [module/xmonad]
@@ -64,7 +70,7 @@ tail = true
 ;;; Bars
 
 [bar/top]
-background = ${colors.bg}
+background = ${colors.independence}
 bottom = false
 dpi = ${xrdb:Xft.dpi:-1}
 enable-ipc = true
@@ -73,7 +79,7 @@ fixed-center = true
 font-0 = Source Code Pro:size=10;8
 font-1 = Font Awesome 5 Free Solid:size=10;10
 font-2 = NotoColorEmoji:scale=14;10
-foreground = ${colors.fg}
+foreground = ${colors.baby-powder}
 height = 100
 ; Add space.
 module-margin = 1

@@ -6,4 +6,4 @@ ExecStart=/run/current-system/sw/bin/feh --bg-fill %h/.local/share/background.jp
 Type=oneshot
 
 [Install]
-WantedBy=graphical.target
+WantedBy=default.target
