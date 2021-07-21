@@ -92,5 +92,6 @@ override-redirect = true
 padding = 1
 ; Scale icons.
 tray-maxsize = 50
+tray-offset-x = 15%
 tray-position = center
 width = 100%
