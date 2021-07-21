@@ -2,7 +2,7 @@ _edit()
 {
     local cur="${COMP_WORDS[COMP_CWORD]}"
 
-    local opts=$(find $(git_dir) -ipath "*$cur*")
+    local opts=$(find $(git rev-parse --show-toplevel) -ipath "*$cur*")
 
     COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
     return 0

@@ -59,8 +59,7 @@
   (package-menu-mark-upgrades)
   (package-menu-execute t)
   (kill-buffer "*Packages*")
-  (kill-buffer "*Compile-Log*")
-  )
+  (kill-buffer "*Compile-Log*"))
 
 ;; Define space-init-keymap
 (make-map space-init-keymap
@@ -90,11 +89,14 @@
             ("x" 'delete-window)
             ("X" 'delete-other-windows)
             (";" 'comment-line)
+            ("TAB" 'indent-relative)
             ))
 
 ;; Define vspace-keymap
 (make-map vspace-keymap
-          '(("o" 'my-occur-region)
+          '(("a" 'align-regexp)
+            ("o" 'my-occur-region)
+            ("r" 'indent-rigidly)
             (";" 'comment-or-uncomment-region)
             ))
 

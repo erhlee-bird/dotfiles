@@ -1,0 +1,12 @@
+[Unit]
+Description=AutoCutSel: Linux Clipboard Syncing
+
+[Service]
+ExecStart=/run/current-system/sw/bin/autocutsel -selection PRIMARY -fork
+ExecStartPre=/run/current-system/sw/bin/autocutsel -fork
+Restart=always
+RestartSec=2
+Type=forking
+
+[Install]
+WantedBy=multi-user.target

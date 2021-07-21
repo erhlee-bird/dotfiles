@@ -1,0 +1,90 @@
+;;; Colors
+
+[colors]
+; baby-powder
+fg = #f0f4ef
+; independence
+bg = #344966
+
+;;; Global
+
+[global/wm]
+margin-bottom = 0
+margin-top = 0
+
+;;; Modules
+
+[module/battery]
+type = internal/battery
+full-at = 98
+battery = BAT0
+adapter = AC
+poll-interval = 5
+format-discharging = <ramp-capacity> <label-discharging>
+label-charging =  %percentage%%
+label-full =  %percentage%%
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+
+[module/datetime]
+type = internal/date
+interval = 1.0
+date = "%Y-%m-%d"
+time = "%H:%M"
+label = " %date% %time%"
+
+[module/pulseaudio]
+type = internal/pulseaudio
+use-ui-max = true
+interval = 5
+format-volume = <ramp-volume> <label-volume>
+label-volume = %percentage%%
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
+label-muted =  0%
+label-muted-foreground = #666
+click-right = pavucontrol
+
+[module/wlan]
+type = internal/network
+interface = wlp114s0
+interval = 3.0
+label-connected = " %essid%"
+click-left = nm-connection-editor
+
+[module/xmonad]
+type = custom/script
+exec = /run/current-system/sw/bin/xmonad-log
+tail = true
+
+;;; Bars
+
+[bar/top]
+background = ${colors.bg}
+bottom = false
+dpi = ${xrdb:Xft.dpi:-1}
+enable-ipc = true
+fixed-center = true
+; Select a DPI-scaling font.
+font-0 = Source Code Pro:size=10;8
+font-1 = Font Awesome 5 Free Solid:size=10;10
+font-2 = NotoColorEmoji:scale=14;10
+foreground = ${colors.fg}
+height = 100
+; Add space.
+module-margin = 1
+modules-left = xmonad
+modules-right = wlan pulseaudio battery datetime
+monitor =
+; Force Xmonad to not control the bar placement.
+override-redirect = true
+; Add space at the beginning/end of the bar.
+padding = 1
+; Scale icons.
+tray-maxsize = 50
+tray-position = center
+width = 100%

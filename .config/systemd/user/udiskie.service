@@ -1,0 +1,10 @@
+[Unit]
+Description=udiskie: Automount USB Devices
+
+[Service]
+ExecStart=/run/current-system/sw/bin/udiskie --tray
+Restart=always
+Type=simple
+
+[Install]
+WantedBy=multi-user.target

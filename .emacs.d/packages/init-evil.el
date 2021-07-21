@@ -22,6 +22,8 @@
       (evil-previous-line 2)))
   :init
   (evil-mode t)
+  (global-undo-tree-mode)
+  (evil-set-undo-system 'undo-tree)
   (setq evil-default-cursor t)
   :config
   ; Enable code folding.

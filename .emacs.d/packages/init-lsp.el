@@ -14,9 +14,6 @@
   (setq-default lsp-pyls-configuration-sources ["flake8"])
   (setq lsp-enable-snippet nil)
   (setq lsp-message-project-root-warning t)
-  (setq lsp-prefer-flymake nil)
-  (require 'lsp-clients)
-  (add-hook 'python-mode-hook 'lsp)
   )
 
 (use-package lsp-ui
@@ -26,6 +23,7 @@
   ; lsp-ui lags horribly with larger projects.
   (add-hook 'lsp-mode-hook 'lsp-ui-mode)
   )
+
 (use-package pyvenv :ensure t)
 
 (use-package lsp-go
@@ -33,6 +31,7 @@
   :commands lsp-go-enable
   :init
   (add-hook 'go-mode-hook #'lsp-go-enable))
+
 (use-package lsp-javascript-typescript
   :after (lsp-mode)
   :commands lsp-javascript-typescript-enable
@@ -41,14 +40,13 @@
   (add-hook 'typescript-mode-hook #'lsp-javascript-typescript-enable)
   (add-hook 'js3-mode-hook #'lsp-javascript-typescript-enable)
   (add-hook 'rjsx-mode-hook #'lsp-javascript-typescript-enable))
+
 (use-package lsp-haskell
   :after lsp-mode
   :commands lsp-haskell-enable
   :init
   (add-hook 'haskell-mode-hook 'lsp-haskell-enable))
-(use-package ccls
-  :hook ((c-mode c++-mode) .
-         (lambda () (require 'ccls) (lsp))))
+
 (use-package my-keybindings
   :after (lsp-mode)
   :commands make-map

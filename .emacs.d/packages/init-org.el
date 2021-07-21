@@ -36,7 +36,11 @@
           (progn
             (end-of-line)
             (org-insert-subheading nil)
-            (insert today-headline))
+            (insert today-headline)
+            (kill-whole-line)
+            (goto-char (point-max))
+            (newline)
+            (yank))
         (progn
           (goto-char (org-find-exact-headline-in-buffer today-headline))
           (end-of-line)))))
@@ -81,15 +85,20 @@
                             ; template
            "%? file:%F::%(with-current-buffer (org-capture-get :original-buffer) (number-to-string (line-number-at-pos)))\n")
           ))
+  ;; Show time in hours as a float rather than in time.
+  (setq org-duration-format '(("h" . t) (special . 2)))
   (add-hook 'org-mode-hook 'auto-fill-mode)
   :config
   (unless (not (null org-agenda-files))
     (setq org-agenda-files (cons org-default-notes-file nil))))
+
 (use-package ox-latex
   :config
   (setq org-latex-pdf-process
         '("xelatex -interaction nonstopmode %f"
-          "xelatex -interaction nonstopmode %f")))
+          "xelatex -interaction nonstopmode %f"))
+  (setq org-latex-with-hyperref nil))
+
 (use-package my-keybindings
   :after (evil org)
   :commands (evil-define-key make-map)
@@ -107,6 +116,7 @@
               ("f" 'org-switchb)
               ("i" 'org-insert-heading)
               ("I" 'org-insert-subheading)
+              ("l" 'org-latex-export-to-pdf)
               ("L" 'org-toggle-link-display)
               ("o" 'org-open-at-point)
               ("p" 'org-insert-link)
@@ -145,9 +155,11 @@
   (make-map space-org-time-keymap
             '(("c" 'org-clock-in)
               ("C" 'org-clock-out)
+              ("d" 'org-clock-display)
+              ("r" 'org-resolve-clock)
               ("s" 'org-time-stamp)
               ("S" 'my-current-time-stamp)
-              ))
+              ("u" 'org-clock-update-time-maybe)))
 
   (evil-define-key 'normal org-mode-map
     (kbd "a") space-org-agenda-keymap
