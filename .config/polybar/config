@@ -85,7 +85,7 @@ height = 100
 module-margin = 1
 modules-left = xmonad
 modules-right = wlan pulseaudio battery datetime
-monitor =
+monitor = ${env:MONITOR:}
 ; Force Xmonad to not control the bar placement.
 override-redirect = true
 ; Add space at the beginning/end of the bar.
