@@ -1,0 +1,19 @@
+export DPI_DAMPENING="${DPI_DAMPENING:-0.95}"
+
+# Detect Screen Resolution and adjust dpi.
+if [[ ! -f /tmp/.Xresources.dpi ]]; then
+  if xset q &>/dev/null; then
+    XPIX="$(xrandr | grep '\*' | tr -s ' ' | cut -d ' ' -f 2 | cut -d 'x' -f 1 | head -n 1)"
+    YPIX="$(xrandr | grep '\*' | tr -s ' ' | cut -d ' ' -f 2 | cut -d 'x' -f 2 | head -n 1)"
+    DIAG="$(xrandr | awk '/ connected/{print sqrt( ($(NF-2)/10)^2 + ($NF/10)^2 )/2.54" inches"}')"
+    DIAG="${DIAG% *}"
+    DPI="$(echo "$(( XPIX*XPIX + YPIX*YPIX ))" | awk '{print sqrt($1)}')"
+    # Add a user-preferred dampening factor.
+    DPI="$(echo "$XPIX*$DPI_DAMPENING" | bc)"
+    DPI="$(awk -v dpi="$DPI" -v diag="$DIAG" 'BEGIN {print dpi / diag}')"
+    DPI="${DPI%.*}"
+
+    echo "Xft.dpi: $DPI" > /tmp/.Xresources.dpi
+    xrdb -merge /tmp/.Xresources.dpi
+  fi
+fi

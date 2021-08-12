@@ -1,0 +1,8 @@
+# Enable local bin.
+export PATH="${HOME}/.local/bin:${PATH}"
+
+# Elixir Tooling.
+export ERL_AFLAGS="-kernel shell_history enabled"
+
+# Java Tooling.
+export JAVA_HOME="/"
