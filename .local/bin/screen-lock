@@ -1,13 +1,29 @@
 #!/bin/sh
 
+LOCKER="${LOCKER:-i3lock-color}"
 export PATH="${PATH}:/run/current-system/sw/bin/"
+
+if pgrep -f "${LOCKER}" >/dev/null; then
+  echo "${LOCKER} already active"
+  exit 0
+fi
 
 echo "Locked at $(date)"
 betterlockscreen -l dim &
 pid=$$
 
-until ! kill -0 $pid || fprintd-verify; do
-  echo "Failed to verify fingerprint at $(date)"
+# Wait for the locker to come online.
+until pgrep -f "${LOCKER}" >/dev/null; do sleep 0.1; done
+
+# Attempt to verify fingerprints until no locker is running.
+until ! pgrep -f "${LOCKER}" >/dev/null; do
+  # Give the fingerprint verification 3 seconds.
+  # This helps mitigate having unresponsive scanners.
+  if timeout 3 fprintd-verify; then
+    break
+  else
+    echo "Failed to verify fingerprint at $(date)"
+  fi
 done
 
 echo "Unlocked at $(date)"
