@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 # Wrapper to start the emacs daemon if it's not running and run a client.
 
-set -x
-
 function _edit {
   if [[ ! -z "$INSIDE_EMACS" ]]; then
       echo "Already inside an emacs session."
