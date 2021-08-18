@@ -7,6 +7,7 @@
   :ensure t
   :config
   (global-flycheck-mode))
+
 (use-package my-keybindings
   :after flycheck
   :commands make-map
@@ -14,6 +15,7 @@
   :config
   (make-map space-ide-keymap
             '(("c" 'flycheck-next-error))))
+
 (use-package cc-mode
   :after flycheck
   :config

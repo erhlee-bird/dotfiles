@@ -7,7 +7,7 @@ function _edit {
       exit 0
   fi
 
-  if command -v "emacs" 2>/dev/null; then
+  if command -v "emacs" >/dev/null; then
     emacsclient -a="" -s "$HOME/store/tmp/emacs/server" "$@"
   else
     vim "${@:2}"
