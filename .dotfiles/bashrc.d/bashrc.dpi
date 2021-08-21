@@ -1,4 +1,4 @@
-export DPI_DAMPENING="${DPI_DAMPENING:-0.95}"
+export DPI_DAMPENING="${DPI_DAMPENING:-0.91}"
 
 # Detect Screen Resolution and adjust dpi.
 if [[ ! -f /tmp/.Xresources.dpi ]]; then
