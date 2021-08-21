@@ -52,6 +52,12 @@ label-muted = " 0%"
 label-muted-foreground = #666
 click-right = pavucontrol
 
+[module/temperature]
+type = internal/temperature
+interval = 5
+thermal-zone = 0
+hwmon-path = /sys/devices/platform/coretemp.0/hwmon/hwmon3/temp1_input
+
 [module/wlan]
 type = internal/network
 interface = wlp114s0
@@ -60,11 +66,11 @@ label-connected = ""
 label-connected-foreground = ${colors.middle-blue-green}
 label-disconnected = ""
 label-disconnected-foreground = #666
-click-left = nm-connection-editor
+click-right = nm-connection-editor
 
 [module/xmonad]
 type = custom/script
-exec = /run/current-system/sw/bin/xmonad-log
+exec = xmonad-log
 tail = true
 
 ;;; Bars
@@ -84,7 +90,7 @@ height = 100
 ; Add space.
 module-margin = 1
 modules-left = xmonad
-modules-right = wlan pulseaudio battery datetime
+modules-right = wlan temperature pulseaudio battery datetime
 monitor = ${env:MONITOR:}
 ; Force Xmonad to not control the bar placement.
 override-redirect = true

@@ -1,5 +1,5 @@
-Xcursor.theme: Pop
-Xcursor.size: 256
+Xcursor.theme: Adwaita
+Xcursor.size: 64
 
 Xft.autohint: 0
 Xft.antialias: 1
