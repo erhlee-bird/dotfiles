@@ -5,7 +5,7 @@ if [[ ! -d "${HOME}/.ssh/conf.d" ]]; then
   exit 1
 fi
 
-sorted_config_files="$(ls -dr "${HOME}/.ssh/conf.d/*")"
+sorted_config_files="$(find "${HOME}/.ssh/conf.d" -type f | grep -v ".gitignore" | sort)"
 if [[ ! -z "${sorted_config_files}" ]]; then
   echo "Combining all ssh config files available in ~/.ssh/conf.d/"
   cat ${sorted_config_files} > "${HOME}/.ssh/config_combined"
