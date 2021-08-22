@@ -66,7 +66,10 @@ label-connected = ""
 label-connected-foreground = ${colors.middle-blue-green}
 label-disconnected = ""
 label-disconnected-foreground = #666
-click-right = nm-connection-editor
+format-connected-prefix = "%{A1:nm-connection-editor &:}"
+format-connected-suffix = "%{A}"
+format-disconnected-prefix = "%{A1:nm-connection-editor &:}"
+format-disconnected-suffix = "%{A}"
 
 [module/xmonad]
 type = custom/script
