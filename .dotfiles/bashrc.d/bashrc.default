@@ -6,3 +6,7 @@ export ERL_AFLAGS="-kernel shell_history enabled"
 
 # Java Tooling.
 export JAVA_HOME="/"
+
+export EDITOR=vim
+
+alias open="xdg-open"

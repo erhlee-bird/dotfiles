@@ -16,8 +16,8 @@
   (defun my-current-time-stamp ()
     "Insert the current time stamp."
     (interactive)
-    (setq current-prefix-arg '(16))
-    (call-interactively 'org-time-stamp-inactive))
+    (let ((current-prefix-arg '(16))) ;; simulate C-u C-u
+      (call-interactively 'org-time-stamp-inactive)))
 
   (defun journal-to-today ()
     "Create the base journal structure with two entry levels."
@@ -44,6 +44,11 @@
         (progn
           (goto-char (org-find-exact-headline-in-buffer today-headline))
           (end-of-line)))))
+
+  (defun my-org-open-at-point ()
+    (interactive)
+    (let ((current-prefix-arg '(16))) ;; simulate C-u C-u
+      (call-interactively #'org-open-at-point)))
   :init
   (setq org-directory (expand-file-name "~/.emacs.d/org"))
   ;; Make default org directory.
@@ -88,6 +93,12 @@
   ;; Show time in hours as a float rather than in time.
   (setq org-duration-format '(("h" . t) (special . 2)))
   (add-hook 'org-mode-hook 'auto-fill-mode)
+  ;; Default to xdg-open for opening files externally.
+  (setq org-file-apps '((remote . emacs)
+                        (auto-mode . emacs)
+                        (directory . emacs)
+                        (system . "setsid -w xdg-open %s")
+                        (t . system)))
   :config
   (unless (not (null org-agenda-files))
     (setq org-agenda-files (cons org-default-notes-file nil))))
@@ -119,6 +130,7 @@
               ("l" 'org-latex-export-to-pdf)
               ("L" 'org-toggle-link-display)
               ("o" 'org-open-at-point)
+              ("O" 'my-org-open-at-point)
               ("p" 'org-insert-link)
               ("r" 'org-refile)
               ("s" 'org-store-link)
@@ -127,6 +139,7 @@
               ("v" 'org-cycle)
               ("V" 'org-global-cycle)
               ("&" 'org-mark-ring-goto)
+              ("/" 'org-match-sparse-tree)
               ))
 
   ;; Define space-org-agenda-keymap

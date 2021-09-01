@@ -20,6 +20,9 @@
   (package-install 'use-package))
 (require 'use-package)
 
+;; Rely on the system to open URLs.
+(setq browse-url-browser-function 'browse-url-xdg-open)
+
 (use-package counsel :ensure t)
 (use-package projectile :ensure t)
 (use-package counsel-projectile :ensure t)
