@@ -126,7 +126,7 @@
               ("e" 'org-export-dispatch)
               ("f" 'org-switchb)
               ("i" 'org-insert-heading)
-              ("I" 'org-insert-subheading)
+              ("I" 'org-insert-heading-respect-content)
               ("l" 'org-latex-export-to-pdf)
               ("L" 'org-toggle-link-display)
               ("o" 'org-open-at-point)

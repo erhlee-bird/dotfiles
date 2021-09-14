@@ -27,6 +27,9 @@
 (use-package projectile :ensure t)
 (use-package counsel-projectile :ensure t)
 
+(use-package auto-sudoedit)
+(auto-sudoedit-mode 1)
+
 (add-to-list 'load-path "~/.emacs.d/packages")
 ;; Load any my-prefixed custom packages first.
 ;; Enable/Disable as desired below.

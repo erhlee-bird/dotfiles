@@ -1,0 +1,4 @@
+configuration {
+    font: "Source Code Pro 32";
+    theme: "/nix/store/6n460wzidgp8pvfbc5lrsxqiviqfhs5f-rofi-1.6.1/share/rofi/themes/solarized_alternate.rasi";
+}
