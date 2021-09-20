@@ -52,7 +52,7 @@
             '(("a" 'my-projectile-add-known-project)
               ("c" 'projectile-cleanup-known-projects)
               ("k" 'projectile-kill-buffers)
-              ("p" 'counsel-projectile-switch-project)
+              ("p" 'projectile-switch-project)
               ("r" 'projectile-remove-known-project))))
 
 (provide 'init-ivy)
