@@ -7,7 +7,4 @@ export XDG_RUNTIME_DIR="${TMPDIR}"
 # Elixir Tooling.
 export ERL_AFLAGS="-kernel shell_history enabled"
 
-# Java Tooling.
-export JAVA_HOME="/"
-
 alias open="xdg-open"

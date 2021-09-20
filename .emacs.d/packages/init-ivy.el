@@ -24,7 +24,7 @@
   (setq projectile-enable-caching t)
   (setq projectile-git-command "rg -0 --files --color=never")
   (setq projectile-generic-command "rg -0 --files --color=never")
-  (setq projectile-indexing-method 'hybrid)
+  (setq projectile-indexing-method 'alien)
 
   ; Ripgrep will use .gitignore to ignore files.
   ; (add-to-list 'projectile-globally-ignored-directories "*.elixir_ls")
@@ -45,7 +45,9 @@
   :config
   (make-map space-keymap
             '(("/" 'counsel-rg)
-              ("SPC" 'counsel-projectile)))
+              ; See https://github.com/ericdanan/counsel-projectile/issues/179
+              ; ("SPC" 'counsel-projectile)
+              ("SPC" 'projectile-find-file)))
   (make-map space-projectile-keymap
             '(("a" 'my-projectile-add-known-project)
               ("c" 'projectile-cleanup-known-projects)

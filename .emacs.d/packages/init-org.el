@@ -140,6 +140,7 @@
               ("V" 'org-global-cycle)
               ("&" 'org-mark-ring-goto)
               ("/" 'org-match-sparse-tree)
+              ("DEL" 'org-mark-ring-goto)
               ))
 
   ;; Define space-org-agenda-keymap
