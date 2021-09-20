@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# Polybar runs in order of monitor width.
+# The tray appears on the widest monitor.
+while read -r line; do
+  monitor="$(echo "$line" | cut -d ' ' -f 1)"
+  width="$(echo "$line" | grep -oP '\d+x\d+' | cut -d 'x' -f 1)"
+  height="$(echo "$line" | grep -oP '\d+x\d+' | cut -d 'x' -f 2)"
+
+  # Only place the bar on wide screens.
+  if (( width > height )); then
+    MONITOR="${monitor}" polybar top &
+  fi
+done < <(xrandr --query | grep " connected" | sort -n -t " " -k 3)
+
+wait

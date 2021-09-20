@@ -1,0 +1,3 @@
+#!/bin/sh
+
+oathtool --base32 --totp "$(tail -n 1 $1)"
