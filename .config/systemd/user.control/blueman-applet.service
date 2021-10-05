@@ -4,6 +4,7 @@ Description=blueman-applet: Manage Bluetooth
 [Service]
 ExecStart=/run/current-system/sw/bin/blueman-applet
 Restart=always
+RestartSec=1
 Type=simple
 
 [Install]

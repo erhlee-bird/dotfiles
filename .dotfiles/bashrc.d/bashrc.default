@@ -2,7 +2,6 @@
 export EDITOR=vim
 export PATH="${HOME}/.local/bin:${PATH}"
 export TMPDIR="/tmp"
-export XDG_RUNTIME_DIR="${TMPDIR}"
 
 # Elixir Tooling.
 export ERL_AFLAGS="-kernel shell_history enabled"

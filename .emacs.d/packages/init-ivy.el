@@ -36,6 +36,12 @@
     (call-interactively 'projectile-add-known-project)
     (projectile-save-known-projects))
 
+  (defun my-projectile-recache ()
+    "Invalidate the project cache and reinitialize it."
+    (interactive)
+    (execute-kbd-macro
+     (kbd "C-u M-x counsel-projectile RET C-g")))
+
   (setq projectile-completion-system 'ivy))
 
 (use-package my-keybindings
@@ -53,7 +59,8 @@
               ("c" 'projectile-cleanup-known-projects)
               ("k" 'projectile-kill-buffers)
               ("p" 'projectile-switch-project)
-              ("r" 'projectile-remove-known-project))))
+              ("r" 'projectile-remove-known-project)
+              ("!" 'my-projectile-recache))))
 
 (provide 'init-ivy)
 ;;; init-ivy ends here

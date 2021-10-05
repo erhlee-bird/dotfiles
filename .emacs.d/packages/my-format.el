@@ -11,6 +11,7 @@
               indent-tabs-mode nil
               c-default-style "k&r"
               c-basic-offset 4
+              css-indent-offset 2
               js-indent-level 2
               sh-basic-offset 2
               typescript-indent-level 2
