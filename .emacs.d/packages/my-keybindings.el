@@ -61,13 +61,31 @@
   (kill-buffer "*Packages*")
   (kill-buffer "*Compile-Log*"))
 
+(defun my-github-checkout (repo-pair)
+  "Checkout a REPO-PAIR specified by a 'username/reponame' string, to local source tree."
+  (interactive)
+  (message (format "Checking out GitHub repo: %s" repo-pair))
+  (let* ((repo-split (split-string repo-pair "/"))
+         (user (car repo-split))
+         (repo (cadr repo-split))
+         (default-directory (expand-file-name "~/.local/src/github.com/")))
+    ;; Create the user directory.
+    (shell-command (format "mkdir -p %s" user))
+    (let ((default-directory (format "%s/%s" default-directory user)))
+      (shell-command (format "[ ! -d \"%s\" ] && git clone https://github.com/%s || :" repo repo-pair))
+      (shell-command (format "[ -d \"%s\" ] && (cd %s && git pull) || :" repo repo)))))
+
+(defun my-github-checkout-at-point ()
+  "Check out the GitHub repo at point."
+  (interactive)
+  (my-github-checkout (thing-at-point 'filename)))
+
 ;; Define space-init-keymap
 (make-map space-init-keymap
           '(("i" 'my-edit-file)
             ("k" 'my-key-file)
             ("l" 'package-list-packages)
-            ("u" 'my-update-packages)
-            ))
+            ("u" 'my-update-packages)))
 
 ;; Define space-keymap
 (make-map space-keymap
@@ -78,6 +96,7 @@
             ("E" 'eval-buffer)
             ("f" 'find-file)
             ("F" 'dired)
+            ("G" 'my-github-checkout-at-point)
             ("i" space-init-keymap)
             ("K" 'kill-this-buffer)
             ("m" space-magit-keymap)
@@ -89,16 +108,14 @@
             ("x" 'delete-window)
             ("X" 'delete-other-windows)
             (";" 'comment-line)
-            ("TAB" 'indent-relative)
-            ))
+            ("TAB" 'indent-relative)))
 
 ;; Define vspace-keymap
 (make-map vspace-keymap
           '(("a" 'align-regexp)
             ("o" 'my-occur-region)
             ("r" 'indent-rigidly)
-            (";" 'comment-or-uncomment-region)
-            ))
+            (";" 'comment-or-uncomment-region)))
 
 (provide 'my-keybindings)
 ;;; my-keybindings.el ends here

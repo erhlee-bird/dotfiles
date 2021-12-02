@@ -40,8 +40,7 @@
                    (let ((w (length (number-to-string
                                      (count-lines (point-min) (point-max))))))
                      (concat " %" (number-to-string w) "d")))))
-    (setq linum-format 'linum-format-func)
-    ))
+    (setq linum-format 'linum-format-func)))
 
 (line-number-mode 1)
 (column-number-mode 1)
@@ -50,6 +49,10 @@
 (defadvice split-window (after move-point-to-new-window activate)
   "Move the point to the newly created window after splitting."
   (other-window 1))
+
+;; Prefer splitting vertically.
+(setq split-height-threshold 1)
+(setq split-width-threshold 100)
 
 (provide 'my-display)
 ;;; my-display.el ends here

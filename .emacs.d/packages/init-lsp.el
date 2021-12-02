@@ -12,9 +12,18 @@
   :defines lsp-message-project-root-warning
   :config
   (setq-default lsp-pyls-configuration-sources ["flake8"])
+  (setq lsp-completion-enable t)
+  (setq lsp-enable-file-watchers nil)
+  (setq lsp-enable-indentation t)
   (setq lsp-enable-snippet nil)
-  (setq lsp-message-project-root-warning t)
-  )
+  (setq lsp-lens-enable t)
+  (setq lsp-message-project-root-warning t))
+
+(use-package lsp-treemacs
+  :ensure t
+  :after (lsp-mode)
+  :config
+  (setq treemacs-space-between-root-nodes nil))
 
 (use-package lsp-ui
   :ensure t
@@ -22,7 +31,17 @@
   :init
   ; lsp-ui lags horribly with larger projects.
   (add-hook 'lsp-mode-hook 'lsp-ui-mode)
-  )
+  :config
+  (setq lsp-ui-doc-enable t))
+
+(use-package cider
+  :ensure t
+  :init
+  (add-hook 'clojure-mode-hook #'cider-mode)
+  (add-hook 'clojure-mode-hook 'lsp)
+  :config
+  (setq cider-test-show-report-on-success t)
+  (set-variable 'cider-lein-parameters (concat "with-profile +dev repl :headless")))
 
 (use-package pyvenv :ensure t)
 
@@ -54,6 +73,7 @@
   :config
   (make-map space-ide-keymap
             '(("d" #'lsp-find-definition)
+              ("f" #'lsp-format-buffer)
               ("l" #'lsp-mode)
               ("r" #'lsp-find-references)
               ("R" #'lsp-restart-workspace)

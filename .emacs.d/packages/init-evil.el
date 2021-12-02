@@ -68,7 +68,13 @@
     (kbd "n") 'evil-search-next
     (kbd "N") 'evil-search-previous)
   ; Modes that should use Emacs state.
-  (dolist (mode '(dired-mode term-mode git-rebase-mode))
+  (dolist (mode '(cider-stacktrace-mode
+                  cider-test-report-mode
+                  dired-mode
+                  ;; XXX: this is too common
+                  ;; fundamental-mode
+                  git-rebase-mode
+                  term-mode))
     (add-to-list 'evil-emacs-state-modes mode))
   ; Fix for evil overwriting Ctrl+D in term mode.
   (delete 'term-mode evil-insert-state-modes))

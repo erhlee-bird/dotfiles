@@ -42,6 +42,33 @@
     (execute-kbd-macro
      (kbd "C-u M-x counsel-projectile RET C-g")))
 
+  (defun my-count-slashes (path)
+    "Count the number of slashes in PATH."
+    (seq-count (lambda (x) (char-equal x ?/)) path))
+
+  (defun my-github-projectile-index ()
+    "Index all of the downloaded GitHub projects into Projectile."
+    (interactive)
+    (message "Start Indexing downloaded GitHub projects")
+    (let* ((default-directory (expand-file-name "~/.local/src/github.com/"))
+           (min-depth (my-count-slashes default-directory)))
+      (->> (directory-files-recursively default-directory
+                                        ".*"
+                                        t
+                                        (lambda (x)
+                                          (when (<= (my-count-slashes x)
+                                                    (+ min-depth 1))
+                                            t))
+                                        nil)
+           (seq-filter
+            (lambda (x)
+              (and (file-directory-p x)
+                   (= (my-count-slashes x)
+                      (+ min-depth 1)))))
+           (mapc 'projectile-add-known-project)))
+    (projectile-save-known-projects)
+    (message "Finished Indexing GitHub projects."))
+
   (setq projectile-completion-system 'ivy))
 
 (use-package my-keybindings
@@ -57,9 +84,11 @@
   (make-map space-projectile-keymap
             '(("a" 'my-projectile-add-known-project)
               ("c" 'projectile-cleanup-known-projects)
+              ("G" 'my-github-projectile-index)
               ("k" 'projectile-kill-buffers)
               ("p" 'projectile-switch-project)
               ("r" 'projectile-remove-known-project)
+              ("t" 'projectile-find-test-file)
               ("!" 'my-projectile-recache))))
 
 (provide 'init-ivy)

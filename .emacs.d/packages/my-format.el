@@ -29,13 +29,33 @@
   ; (setq whitespace-style '(face tabs lines-tail trailing))
   (add-hook 'before-save-hook 'delete-trailing-whitespace))
 
+(use-package web-mode
+  :config
+  (add-to-list 'auto-mode-alist '("\\.heex\\'" . web-mode))
+  :custom
+  (web-mode-markup-indent-offset 2)
+  (web-mode-css-indent-offset 2)
+  (web-mode-code-indent-offset 2))
+
 (use-package my-keybindings
   :after whitespace
   :commands make-map
   :defines space-display-keymap vspace-keymap
   :config
+  ;; Allow for toggleable maximizing a single buffer.
+  (defun toggle-maximize-buffer ()
+    "Maximize current buffer."
+    (interactive)
+    (if (= 1 (length (window-list)))
+        (jump-to-register '_)
+      (progn
+        (window-configuration-to-register '_)
+        (delete-other-windows))))
+  ;; Enable `hs-minor-mode` in all programming modes.
+  (add-hook 'prog-mode-hook #'hs-minor-mode)
   (make-map space-display-keymap
-            '(("h" 'highlight-symbol-at-point)
+            '(("f" 'toggle-maximize-buffer)
+              ("h" 'highlight-symbol-at-point)
               ("H" 'unhighlight-regexp)
               ("l" 'linum-mode)
               ("m" 'mark-whole-buffer)
