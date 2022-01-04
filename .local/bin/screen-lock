@@ -17,9 +17,9 @@ until pgrep -f "${LOCKER}" >/dev/null; do sleep 0.1; done
 
 # Attempt to verify fingerprints until no locker is running.
 until ! pgrep -f "${LOCKER}" >/dev/null; do
-  # Give the fingerprint verification 3 seconds.
+  # Give the fingerprint verification a few seconds.
   # This helps mitigate having unresponsive scanners.
-  if timeout 3 fprintd-verify; then
+  if timeout 5 fprintd-verify; then
     break
   else
     echo "Failed to verify fingerprint at $(date)"
