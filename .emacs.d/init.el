@@ -20,6 +20,20 @@
   (package-install 'use-package))
 (require 'use-package)
 
+;; Bootstrap straight.el.
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 6))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
 ;; Rely on the system to open URLs.
 (setq browse-url-browser-function 'browse-url-xdg-open)
 
@@ -27,7 +41,7 @@
 (use-package projectile :ensure t)
 (use-package counsel-projectile :ensure t)
 
-(use-package auto-sudoedit)
+(use-package auto-sudoedit :ensure t)
 (auto-sudoedit-mode 1)
 
 (add-to-list 'load-path "~/.emacs.d/packages")
@@ -36,12 +50,20 @@
 (use-package my-start-server)
 (use-package my-display)
 (use-package my-format)
-(use-package my-theme)
+
+;; (use-package my-theme)
+(use-package base16-theme
+  :ensure t
+  :config
+  (setq base16-theme-256-color-source 'colors)
+  (load-theme 'base16-ocean t))
+
 (use-package my-shell)
 (use-package my-clipboard)
 (use-package my-backup)
 
 ;; Load init-prefixed packages that deal with third-party packages.
+(use-package init-chatgpt)
 (use-package init-company)
 ; (use-package init-erc)
 (use-package init-evil)
