@@ -2,13 +2,22 @@
 # Wrapper to start the emacs daemon if it's not running and run a client.
 
 function _edit {
-  if [[ ! -z "$INSIDE_EMACS" ]]; then
+  if [[ -n "$INSIDE_EMACS" ]]; then
       echo "Already inside an emacs session."
       exit 0
   fi
 
   if command -v "emacs" >/dev/null; then
-    emacsclient -a="" -s "$HOME/store/tmp/emacs/server" "$@"
+    # If in a nix flake, start a daemon specific to that environment.
+    slug="server"
+    if command -v "nix" >/dev/null; then
+      if nix flake metadata &>/dev/null; then
+        slug="flake-$(nix flake metadata --json | jq -r '.resolvedUrl' | md5sum | cut -d ' ' -f 1)"
+      fi
+    fi
+
+    mkdir -p "${XDG_RUNTIME_DIR:-/tmp}/emacs"
+    emacsclient -a="" -s "${XDG_RUNTIME_DIR:-/tmp}/emacs/${slug}" "$@"
   else
     vim "${@:2}"
   fi
