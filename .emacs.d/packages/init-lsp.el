@@ -9,6 +9,7 @@
 (use-package lsp-mode
   :ensure t
   :after (projectile)
+  :commands lsp-format-buffer
   :defines lsp-message-project-root-warning
   :config
   (setq-default lsp-pyls-configuration-sources ["flake8"])
@@ -17,7 +18,8 @@
   (setq lsp-enable-indentation t)
   (setq lsp-enable-snippet nil)
   (setq lsp-lens-enable t)
-  (setq lsp-message-project-root-warning t))
+  (setq lsp-message-project-root-warning t)
+  (add-hook 'before-save-hook #'lsp-format-buffer))
 
 (use-package lsp-treemacs
   :ensure t
@@ -43,6 +45,13 @@
   (setq cider-test-show-report-on-success t)
   (set-variable 'cider-lein-parameters (concat "with-profile +dev repl :headless")))
 
+(use-package elixir-mode
+  :ensure t
+  :init
+  (add-hook 'elixir-mode-hook
+            (lambda ()
+              (add-hook 'before-save-hook 'elixir-format nil t))))
+
 (use-package pyvenv :ensure t)
 
 (use-package lsp-go
@@ -50,15 +59,6 @@
   :commands lsp-go-enable
   :init
   (add-hook 'go-mode-hook #'lsp-go-enable))
-
-(use-package lsp-javascript-typescript
-  :after (lsp-mode)
-  :commands lsp-javascript-typescript-enable
-  :init
-  (add-hook 'js-mode-hook #'lsp-javascript-typescript-enable)
-  (add-hook 'typescript-mode-hook #'lsp-javascript-typescript-enable)
-  (add-hook 'js3-mode-hook #'lsp-javascript-typescript-enable)
-  (add-hook 'rjsx-mode-hook #'lsp-javascript-typescript-enable))
 
 (use-package lsp-haskell
   :after lsp-mode
@@ -72,7 +72,8 @@
   :defines space-ide-keymap
   :config
   (make-map space-ide-keymap
-            '(("d" #'lsp-find-definition)
+            '(("RET" #'lsp-execute-code-action)
+              ("d" #'lsp-find-definition)
               ("f" #'lsp-format-buffer)
               ("l" #'lsp-mode)
               ("r" #'lsp-find-references)

@@ -13,10 +13,10 @@
 (and (boundp 'scroll-bar-mode)
      (scroll-bar-mode -1))
 (add-hook 'after-make-frame-function
-          '(lambda (frame)
-             (modify-frame-parameters frame
-                                      '((vertical-scroll-bars . nil)
-                                        (horizontal-scroll-bars . nil)))))
+          #'(lambda (frame)
+              (modify-frame-parameters frame
+                                       '((vertical-scroll-bars . nil)
+                                         (horizontal-scroll-bars . nil)))))
 (show-paren-mode 1)
 
 ; Set frame background color.

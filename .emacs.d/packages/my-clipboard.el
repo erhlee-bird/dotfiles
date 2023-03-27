@@ -11,8 +11,7 @@
   :config
   (setq select-enable-primary t)
   (setq select-enable-clipboard t)
-  (delete-selection-mode t) ;; Replace selection rather than inserting.
-  )
+  (delete-selection-mode t)) ;; Replace selection rather than inserting.
 
 (provide 'my-clipboard)
 ;;; my-clipboard.el ends here

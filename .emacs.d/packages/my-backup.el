@@ -7,9 +7,10 @@
 ;;; Code:
 
 (setq auto-save-default nil)
-(setq make-backup-files t)
+(setq backup-by-copying t)
 (setq backup-directory-alist `(("." . "~/.emacs.d/saves")))
 (global-auto-revert-mode t)  ;; Reload automatically from disk.
+(setq make-backup-files t)
 (setq vc-follow-symlinks t)
 
 (provide 'my-backup)

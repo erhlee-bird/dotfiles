@@ -92,7 +92,7 @@
           '(("b" 'switch-to-buffer)
             ("c" space-ide-keymap)
             ("d" space-display-keymap)
-            ("e" 'eval-expression)
+            ("e" 'eval-last-sexp)
             ("E" 'eval-buffer)
             ("f" 'find-file)
             ("F" 'dired)

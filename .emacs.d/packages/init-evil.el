@@ -9,7 +9,8 @@
 (use-package undo-tree
   :ensure t
   :init
-  (global-undo-tree-mode))
+  (global-undo-tree-mode)
+  (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo"))))
 
 (use-package evil
   :ensure t
@@ -87,6 +88,9 @@
 (use-package my-keybindings
   :after evil
   :defines space-keymap vspace-keymap
+  :init
+  (setq evil-split-window-below t)
+  (setq evil-vsplit-window-right t)
   :config
   (define-key evil-normal-state-map (kbd "SPC") space-keymap)
   (define-key evil-visual-state-map (kbd "SPC") vspace-keymap)

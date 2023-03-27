@@ -9,6 +9,7 @@
   (setq magit-display-buffer-function
         'magit-display-buffer-same-window-except-diff-v1)
   (setq magit-log-arguments '("-n10" "--color" "--graph" "--decorate" "--patch")))
+
 (use-package my-keybindings
   :after magit
   :commands make-map

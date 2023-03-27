@@ -19,6 +19,13 @@
 (define-key global-map (kbd "RET") 'newline-and-indent)
 (electric-pair-mode -1)
 
+(use-package highlight-indent-guides
+  :init
+  (setq highlight-indent-guides-method 'character)
+  (setq highlight-indent-guides-auto-enabled nil)
+  ; (set-face-foreground 'highlight-indent-guides-character-face "lightgray")
+  )
+
 ; Whitespace
 (use-package whitespace
   :init
@@ -27,11 +34,17 @@
   (setq whitespace-line-column 80)
   (setq whitespace-style '(face tabs trailing))
   ; (setq whitespace-style '(face tabs lines-tail trailing))
-  (add-hook 'before-save-hook 'delete-trailing-whitespace))
+  (defun my-delete-trailing-whitespace-hook
+    ()
+    (delete-trailing-whitespace))
+  (add-hook 'before-save-hook 'my-delete-trailing-whitespace-hook))
 
 (use-package web-mode
   :config
   (add-to-list 'auto-mode-alist '("\\.heex\\'" . web-mode))
+  (add-hook 'web-mode-hook
+            (lambda ()
+              (add-hook 'before-save-hook 'web-mode-buffer-indent)))
   :custom
   (web-mode-markup-indent-offset 2)
   (web-mode-css-indent-offset 2)
@@ -51,14 +64,22 @@
       (progn
         (window-configuration-to-register '_)
         (delete-other-windows))))
+  (defun hexify ()
+    "Convert a number at point to hexadecimal."
+    (interactive)
+    (setq-local hx (format "0x%x" (string-to-number (word-at-point))))
+    (kill-word 1)
+    (insert hx))
   ;; Enable `hs-minor-mode` in all programming modes.
   (add-hook 'prog-mode-hook #'hs-minor-mode)
   (make-map space-display-keymap
             '(("f" 'toggle-maximize-buffer)
               ("h" 'highlight-symbol-at-point)
               ("H" 'unhighlight-regexp)
+              ("i" 'highlight-indent-guides-mode)
               ("l" 'linum-mode)
               ("m" 'mark-whole-buffer)
+              ("x" 'hexify)
               ("z" 'hs-minor-mode)))
   (make-map vspace-keymap
             '(("a" 'align)

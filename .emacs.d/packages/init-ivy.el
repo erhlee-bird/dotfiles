@@ -22,8 +22,8 @@
   :commands projectile-save-known-projects
   :init
   (setq projectile-enable-caching t)
-  (setq projectile-git-command "rg -0 --files --color=never")
-  (setq projectile-generic-command "rg -0 --files --color=never")
+  (setq projectile-git-command "rg -0 --files --hidden --color=never")
+  (setq projectile-generic-command "rg -0 --files --hidden --color=never")
   (setq projectile-indexing-method 'hybrid)
 
   ; Ripgrep will use .gitignore to ignore files.
