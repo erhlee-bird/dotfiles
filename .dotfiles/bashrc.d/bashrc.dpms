@@ -1,8 +1,0 @@
-# Disable screen saver blanking.
-# DPMS suspends after 15 minutes.
-if [[ ! -f /tmp/.dpms ]]; then
-  xset s off
-  xset dpms 0 900 0
-
-  touch /tmp/.dpms
-fi

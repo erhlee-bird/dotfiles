@@ -1,9 +1,0 @@
-# Common system settings.
-export EDITOR=vim
-export PATH="${HOME}/.local/bin:${PATH}"
-export TMPDIR="/tmp"
-
-# Elixir Tooling.
-export ERL_AFLAGS="-kernel shell_history enabled"
-
-alias open="xdg-open"
