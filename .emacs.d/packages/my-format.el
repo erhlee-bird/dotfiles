@@ -34,10 +34,7 @@
   (setq whitespace-line-column 80)
   (setq whitespace-style '(face tabs trailing))
   ; (setq whitespace-style '(face tabs lines-tail trailing))
-  (defun my-delete-trailing-whitespace-hook
-    ()
-    (delete-trailing-whitespace))
-  (add-hook 'before-save-hook 'my-delete-trailing-whitespace-hook))
+  (add-hook 'before-save-hook #'delete-trailing-whitespace))
 
 (use-package web-mode
   :config
@@ -82,7 +79,7 @@
               ("x" 'hexify)
               ("z" 'hs-minor-mode)))
   (make-map vspace-keymap
-            '(("a" 'align)
+            '(("A" 'align)
               ("h" 'highlight-region)
               ("i" 'indent-region)
               ("t" 'tabify)

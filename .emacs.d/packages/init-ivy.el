@@ -26,8 +26,8 @@
   (setq projectile-generic-command "rg -0 --files --hidden --color=never")
   (setq projectile-indexing-method 'hybrid)
 
-  ; Ripgrep will use .gitignore to ignore files.
-  ; (add-to-list 'projectile-globally-ignored-directories "*.elixir_ls")
+  ;; Ripgrep will use .gitignore to ignore files.
+  ;; (add-to-list 'projectile-globally-ignored-directories "*.elixir_ls")
   :config
   (projectile-mode +1)
   (defun my-projectile-add-known-project ()
@@ -78,8 +78,8 @@
   :config
   (make-map space-keymap
             '(("/" 'counsel-rg)
-              ; See https://github.com/ericdanan/counsel-projectile/issues/179
-              ; ("SPC" 'counsel-projectile)
+              ;; See https://github.com/ericdanan/counsel-projectile/issues/179
+              ;; ("SPC" 'counsel-projectile)
               ("SPC" 'projectile-find-file)))
   (make-map space-projectile-keymap
             '(("a" 'my-projectile-add-known-project)
@@ -92,4 +92,4 @@
               ("!" 'my-projectile-recache))))
 
 (provide 'init-ivy)
-;;; init-ivy ends here
+;;; init-ivy.el ends here

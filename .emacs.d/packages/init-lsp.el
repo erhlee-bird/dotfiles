@@ -8,7 +8,7 @@
 
 (use-package lsp-mode
   :ensure t
-  :after (projectile)
+  :after projectile
   :commands lsp-format-buffer
   :defines lsp-message-project-root-warning
   :config
@@ -18,12 +18,15 @@
   (setq lsp-enable-indentation t)
   (setq lsp-enable-snippet nil)
   (setq lsp-lens-enable t)
-  (setq lsp-message-project-root-warning t)
-  (add-hook 'before-save-hook #'lsp-format-buffer))
+  (setq lsp-message-project-root-warning t))
+
+;; Explicitly enable this hook for modes that want it.
+;; elixir-mode prefers elixir-format.
+;; (add-hook 'before-save-hook #'lsp-format-buffer)
 
 (use-package lsp-treemacs
   :ensure t
-  :after (lsp-mode)
+  :after lsp-mode
   :config
   (setq treemacs-space-between-root-nodes nil))
 
@@ -31,7 +34,7 @@
   :ensure t
   :after (lsp-mode flycheck)
   :init
-  ; lsp-ui lags horribly with larger projects.
+                                        ; lsp-ui lags horribly with larger projects.
   (add-hook 'lsp-mode-hook 'lsp-ui-mode)
   :config
   (setq lsp-ui-doc-enable t))
@@ -48,6 +51,7 @@
 (use-package elixir-mode
   :ensure t
   :init
+  (add-hook 'elixir-mode-hook 'lsp)
   (add-hook 'elixir-mode-hook
             (lambda ()
               (add-hook 'before-save-hook 'elixir-format nil t))))
@@ -55,7 +59,7 @@
 (use-package pyvenv :ensure t)
 
 (use-package lsp-go
-  :after (lsp-mode)
+  :after lsp-mode
   :commands lsp-go-enable
   :init
   (add-hook 'go-mode-hook #'lsp-go-enable))
@@ -67,7 +71,6 @@
   (add-hook 'haskell-mode-hook 'lsp-haskell-enable))
 
 (use-package my-keybindings
-  :after (lsp-mode)
   :commands make-map
   :defines space-ide-keymap
   :config
