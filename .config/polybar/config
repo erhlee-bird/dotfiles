@@ -86,14 +86,14 @@ enable-ipc = true
 fixed-center = true
 ; Select a DPI-scaling font.
 font-0 = Source Code Pro:size=10;8
-font-1 = Font Awesome 5 Free Solid:size=10;10
-font-2 = NotoColorEmoji:scale=14;10
+font-1 = Font Awesome 6 Free Solid:size=10;10
+font-2 = Noto Color Emoji:scale=14;10
 foreground = ${colors.baby-powder}
 height = 100
 ; Add space.
 module-margin = 1
 modules-left = xmonad
-modules-right = wlan temperature pulseaudio battery datetime
+modules-right = temperature pulseaudio battery datetime
 monitor = ${env:MONITOR:}
 ; Force Xmonad to not control the bar placement.
 override-redirect = true
