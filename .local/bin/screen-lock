@@ -1,30 +1,48 @@
-#!/bin/sh
+#!/bin/bash
 
-LOCKER="${LOCKER:-i3lock-color}"
+## CONFIGURATION ##############################################################
+
 export PATH="${PATH}:/run/current-system/sw/bin/"
+export XSECURELOCK_IMAGE_DURATION_SECONDS=15
+export XSECURELOCK_LIST_VIDEOS_COMMAND="find ~/store/images/ -name background.jpg"
+export XSECURELOCK_SAVER=saver_mpv
+export XSECURELOCK_SAVER=saver_blank
 
-if pgrep -f "${LOCKER}" >/dev/null; then
-  echo "${LOCKER} already active"
-  exit 0
+# Delay in seconds. Note that by default systemd-logind allows a maximum sleep
+# delay of 5 seconds.
+sleep_delay=1
+
+# Run before starting the locker
+pre_lock() {
+    return
+}
+
+# Run after the locker exits
+post_lock() {
+    return
+}
+
+###############################################################################
+
+pre_lock
+
+# kill locker if we get killed
+trap 'kill %%' TERM INT
+
+if [[ -e /dev/fd/${XSS_SLEEP_LOCK_FD:--1} ]]; then
+    # lock fd is open, make sure the locker does not inherit a copy
+    # XSECURELOCK_SAVER="${HOME}/.local/bin/screen-saver.sh" \
+    xsecurelock {XSS_SLEEP_LOCK_FD}<&- &
+
+    sleep $sleep_delay
+
+    # now close our fd (only remaining copy) to indicate we're ready to sleep
+    exec {XSS_SLEEP_LOCK_FD}<&-
+else
+    # XSECURELOCK_SAVER="${HOME}/.local/bin/screen-saver.sh" \
+    xsecurelock &
 fi
 
-echo "Locked at $(date)"
-betterlockscreen -l dim &
-pid=$$
+wait # for locker to exit
 
-# Wait for the locker to come online.
-until pgrep -f "${LOCKER}" >/dev/null; do sleep 0.1; done
-
-# Attempt to verify fingerprints until no locker is running.
-until ! pgrep -f "${LOCKER}" >/dev/null; do
-  # Give the fingerprint verification a few seconds.
-  # This helps mitigate having unresponsive scanners.
-  if timeout 5 fprintd-verify; then
-    break
-  else
-    echo "Failed to verify fingerprint at $(date)"
-  fi
-done
-
-echo "Unlocked at $(date)"
-killall i3lock-color
+post_lock
