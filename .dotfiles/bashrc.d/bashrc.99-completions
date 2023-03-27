@@ -1,0 +1,3 @@
+for f in ~/.local/share/bash-completion/completions/*; do
+  . "${f}"
+done

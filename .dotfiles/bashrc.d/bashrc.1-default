@@ -1,0 +1,17 @@
+# Common system settings.
+export EDITOR=vim
+export PATH="${HOME}/.local/bin:${PATH}"
+
+# Elixir Tooling.
+export ERL_AFLAGS="-kernel shell_history enabled"
+
+# Fzf.
+export FZF_COMPLETION_OPTS="--exact"
+export FZF_DEFAULT_COMMAND="rg --files | xargs dirname | sort -u"
+ln -fs "$(dirname $(readlink $(which fzf)))/../share/fzf/completion.bash" \
+       "${HOME}/.local/share/bash-completion/completions/"
+
+# Golang Tooling.
+export GOPATH="${HOME}/.local"
+
+alias open="xdg-open"
