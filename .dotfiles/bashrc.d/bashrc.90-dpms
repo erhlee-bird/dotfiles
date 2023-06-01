@@ -1,8 +1,10 @@
 # Disable screen saver blanking.
 # DPMS suspends after 15 minutes.
-if [[ ! -f "${XDG_RUNTIME_DIR:-/tmp}/.dpms" ]]; then
-  xset s off -dpms
-  xset dpms 0 900 900
+if command -v xset >/dev/null 2>&1; then
+  if [[ ! -f "${XDG_RUNTIME_DIR:-/tmp}/.dpms" ]]; then
+    xset s off -dpms
+    xset dpms 0 900 900
 
-  touch "${XDG_RUNTIME_DIR:-/tmp}/.dpms"
+    touch "${XDG_RUNTIME_DIR:-/tmp}/.dpms"
+  fi
 fi
