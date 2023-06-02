@@ -1,43 +1,45 @@
-SSH_DIR="${HOME}/.ssh"
-SSH_ENV="${SSH_DIR}/environment"
-SSH_TMP="${XDG_RUNTIME_DIR:-/tmp}/ssh-agent"
-if [[ ! -d "${SSH_DIR}" ]]; then
-  mkdir -p $HOME/.ssh/sockets
-fi
+if command ssh-agent >/dev/null; then
+  SSH_DIR="${HOME}/.ssh"
+  SSH_ENV="${SSH_DIR}/environment"
+  SSH_TMP="${XDG_RUNTIME_DIR:-/tmp}/ssh-agent"
+  if [[ ! -d "${SSH_DIR}" ]]; then
+    mkdir -p $HOME/.ssh/sockets
+  fi
 
-function start_agent {
-  echo "Initialising new SSH agent..."
-  ssh-agent -a "$SSH_TMP" > "${SSH_ENV}"
-  chmod 600 "${SSH_ENV}"
-  . "${SSH_ENV}" > /dev/null
-
-  for key in $(find $HOME/.ssh -name "*.pub"); do
-    base=$(basename $key .pub)
-    base=$(basename $base -cert)
-
-    if [[ -f "$(dirname $key)/${base}" ]]; then
-      ssh-add "$(dirname $key)/${base}"
-    fi
-  done
-}
-
-# Source SSH settings, if applicable
-if [ -f "${SSH_ENV}" ]; then
+  function start_agent {
+    echo "Initialising new SSH agent..."
+    ssh-agent -a "$SSH_TMP" > "${SSH_ENV}"
+    chmod 600 "${SSH_ENV}"
     . "${SSH_ENV}" > /dev/null
 
-    # If no ssh-agent is running, start one.
-    pgrep ssh-agent > /dev/null || {
-        rm -f "$SSH_TMP"
-        start_agent;
-    }
+    for key in $(find $HOME/.ssh -name "*.pub"); do
+      base=$(basename $key .pub)
+      base=$(basename $base -cert)
 
-    # If an ssh-agent is running but we can't connect to it then kill it
-    # and start a new one.
-    ssh-add -l &>/dev/null
-    if [ ! $? -eq 0 ]; then
-        killall ssh-agent;
-        start_agent;
-    fi
-else
-    start_agent;
+      if [[ -f "$(dirname $key)/${base}" ]]; then
+        ssh-add "$(dirname $key)/${base}"
+      fi
+    done
+  }
+
+  # Source SSH settings, if applicable
+  if [ -f "${SSH_ENV}" ]; then
+      . "${SSH_ENV}" > /dev/null
+
+      # If no ssh-agent is running, start one.
+      pgrep ssh-agent > /dev/null || {
+          rm -f "$SSH_TMP"
+          start_agent;
+      }
+
+      # If an ssh-agent is running but we can't connect to it then kill it
+      # and start a new one.
+      ssh-add -l &>/dev/null
+      if [ ! $? -eq 0 ]; then
+          killall ssh-agent;
+          start_agent;
+      fi
+  else
+      start_agent;
+  fi
 fi

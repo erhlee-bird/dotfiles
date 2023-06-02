@@ -1,4 +1,7 @@
-mkdir -p ~/.local/share/bash-completion/completions/
-for f in ~/.local/share/bash-completion/completions/*; do
-  . "${f}"
-done
+dir="${HOME}/.local/share/bash-completion/completions"
+mkdir -p "${dir}"
+if find "${dir}" -mindepth 1 -maxdepth 1 | read; then
+  for f in "${dir}"/*; do
+    [[ -e "${f}" ]] && . "${f}"
+  done
+fi
