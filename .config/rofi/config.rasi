@@ -1,4 +1,3 @@
 configuration {
     font: "Source Code Pro 32";
 }
-@theme "/nix/store/6x1zx27fqmxyh7ldnw5w9w0gg9x698vh-rofi-1.7.3/share/rofi/themes/solarized_alternate.rasi"
