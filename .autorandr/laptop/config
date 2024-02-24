@@ -1,0 +1,28 @@
+output DP-1
+off
+output HDMI-1
+off
+output DP-2
+off
+output DP-3
+off
+output DP-4
+off
+output DP-1-1
+off
+output DP-1-1-8
+off
+output DP-1-1-1
+off
+output DVI-I-2-2
+off
+output DVI-I-1-1
+off
+output eDP-1
+crtc 0
+gamma 1.0:0.909:0.833
+mode 3840x2400
+pos 0x3840
+primary
+rate 59.99
+transform 0.750000,0.000000,0.000000,0.000000,0.750000,0.000000,0.000000,0.000000,1.000000
