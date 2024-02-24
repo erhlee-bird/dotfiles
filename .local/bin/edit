@@ -17,6 +17,7 @@ function _edit {
     fi
 
     mkdir -p "${XDG_RUNTIME_DIR:-/tmp}/emacs"
+    chmod og-rwx "${XDG_RUNTIME_DIR:-/tmp}/emacs"
     emacsclient -a="" -s "${XDG_RUNTIME_DIR:-/tmp}/emacs/${slug}" "$@"
   else
     vim "${@:2}"
