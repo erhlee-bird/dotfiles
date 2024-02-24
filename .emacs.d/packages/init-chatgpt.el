@@ -20,7 +20,10 @@
     (unless (string= prompt "")
       ;; Create a new vsplit and switch to it.
       (unless (string= (buffer-name) my-org-ai-buffer-name)
-        (evil-window-split 20 my-org-ai-buffer-name))
+        ;; NB: `evil-window-split` creates a file which we don't want with our
+        ;;     chatgpt buffer.
+        (evil-window-split 20)
+        (switch-to-buffer my-org-ai-buffer-name))
       ;; Make sure that org-mode was enabled for the scratch buffer.
       (org-mode)
       (org-ai-mode)

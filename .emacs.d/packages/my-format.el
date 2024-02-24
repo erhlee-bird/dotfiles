@@ -6,7 +6,7 @@
 
 ;;; Code:
 
-; Indentation
+;; Indentation
 (setq-default buffer-file-coding-system 'utf-8-unix
               indent-tabs-mode nil
               c-default-style "k&r"
@@ -23,25 +23,25 @@
   :init
   (setq highlight-indent-guides-method 'character)
   (setq highlight-indent-guides-auto-enabled nil)
-  ; (set-face-foreground 'highlight-indent-guides-character-face "lightgray")
+  ;; (set-face-foreground 'highlight-indent-guides-character-face "lightgray")
   )
 
-; Whitespace
+;; Whitespace
 (use-package whitespace
   :init
   (global-whitespace-mode t)
   :config
   (setq whitespace-line-column 80)
   (setq whitespace-style '(face tabs trailing))
-  ; (setq whitespace-style '(face tabs lines-tail trailing))
+  ;; (setq whitespace-style '(face tabs lines-tail trailing))
   (add-hook 'before-save-hook #'delete-trailing-whitespace))
 
 (use-package web-mode
   :config
-  (add-to-list 'auto-mode-alist '("\\.heex\\'" . web-mode))
+  ;; (add-to-list 'auto-mode-alist '("\\.heex\\'" . web-mode))
   (add-hook 'web-mode-hook
             (lambda ()
-              (add-hook 'before-save-hook 'web-mode-buffer-indent)))
+              (add-hook 'before-save-hook 'web-mode-buffer-indent nil 'local)))
   :custom
   (web-mode-markup-indent-offset 2)
   (web-mode-css-indent-offset 2)
@@ -74,7 +74,7 @@
               ("h" 'highlight-symbol-at-point)
               ("H" 'unhighlight-regexp)
               ("i" 'highlight-indent-guides-mode)
-              ("l" 'linum-mode)
+              ; ("l" 'linum-mode)
               ("m" 'mark-whole-buffer)
               ("x" 'hexify)
               ("z" 'hs-minor-mode)))

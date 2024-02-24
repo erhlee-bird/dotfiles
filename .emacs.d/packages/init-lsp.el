@@ -20,10 +20,6 @@
   (setq lsp-lens-enable t)
   (setq lsp-message-project-root-warning t))
 
-;; Explicitly enable this hook for modes that want it.
-;; elixir-mode prefers elixir-format.
-;; (add-hook 'before-save-hook #'lsp-format-buffer)
-
 (use-package lsp-treemacs
   :ensure t
   :after lsp-mode
@@ -44,6 +40,9 @@
   :init
   (add-hook 'clojure-mode-hook #'cider-mode)
   (add-hook 'clojure-mode-hook 'lsp)
+  (add-hook 'clojure-mode-hook
+            (lambda ()
+              (add-hook 'before-save-hook #'lsp-format-buffer)))
   :config
   (setq cider-test-show-report-on-success t)
   (set-variable 'cider-lein-parameters (concat "with-profile +dev repl :headless")))
@@ -54,7 +53,7 @@
   (add-hook 'elixir-mode-hook 'lsp)
   (add-hook 'elixir-mode-hook
             (lambda ()
-              (add-hook 'before-save-hook 'elixir-format nil t))))
+              (add-hook 'before-save-hook 'elixir-format nil :local))))
 
 (use-package pyvenv :ensure t)
 
@@ -70,6 +69,12 @@
   :init
   (add-hook 'haskell-mode-hook 'lsp-haskell-enable))
 
+(use-package lsp-tailwindcss
+  :after lsp-mode
+  :ensure t
+  :init
+  (add-hook 'before-save-hook 'lsp-tailwindcss-rustywind-before-save))
+
 (use-package my-keybindings
   :commands make-map
   :defines space-ide-keymap
@@ -78,6 +83,7 @@
             '(("RET" #'lsp-execute-code-action)
               ("d" #'lsp-find-definition)
               ("f" #'lsp-format-buffer)
+              ("F" #'web-mode-buffer-indent)
               ("l" #'lsp-mode)
               ("r" #'lsp-find-references)
               ("R" #'lsp-restart-workspace)

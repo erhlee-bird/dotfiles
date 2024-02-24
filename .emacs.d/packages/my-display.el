@@ -23,26 +23,7 @@
 (setq frame-background-mode 'dark)
 
 ; Set Line Numbers
-(use-package linum
-  :defines linum-format-fmt
-  :preface
-  (defun linum-format-func (line)
-    "Help linum display numbers on line LINE."
-    (concat
-     (propertize (format linum-format-fmt line) 'face 'linum)
-     (propertize " " 'face 'mode-line)))
-  :config
-  (unless (display-graphic-p)
-    (add-hook
-     'linum-before-numbering-hook
-     (lambda ()
-       (setq-local linum-format-fmt
-                   (let ((w (length (number-to-string
-                                     (count-lines (point-min) (point-max))))))
-                     (concat " %" (number-to-string w) "d")))))
-    (setq linum-format 'linum-format-func)))
-
-(line-number-mode 1)
+(global-display-line-numbers-mode 1)
 (column-number-mode 1)
 
 ;; Switch to new split buffers

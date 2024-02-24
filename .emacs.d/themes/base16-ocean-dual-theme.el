@@ -171,10 +171,6 @@
    `(font-lock-warning-face ((,t_type (:foreground ,base08_t))))
    `(font-lock-warning-face ((,g_type (:foreground ,base08_g))))
 
-   ;; linum-mode
-   `(linum ((,t_type (:background ,base01_t :foreground ,base03_t))))
-   `(linum ((,g_type (:background ,base01_g :foreground ,base03_g))))
-
    ;; Search
    `(match ((,t_type (:foreground ,base0D_t :background ,base01_t :inverse-video t))))
    `(match ((,g_type (:foreground ,base0D_g :background ,base01_g :inverse-video t))))

@@ -37,6 +37,10 @@
 ;; Rely on the system to open URLs.
 (setq browse-url-browser-function 'browse-url-xdg-open)
 
+;; Add Python to org-babel.
+(org-babel-do-load-languages
+ 'org-babel-load-languages '((python . t)))
+
 (use-package counsel :ensure t)
 (use-package projectile :ensure t)
 (use-package counsel-projectile :ensure t)
@@ -63,7 +67,7 @@
 (use-package my-backup)
 
 ;; Load init-prefixed packages that deal with third-party packages.
-(use-package init-chatgpt)
+;; (use-package init-chatgpt)
 (use-package init-company)
 ; (use-package init-erc)
 (use-package init-evil)

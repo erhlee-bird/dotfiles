@@ -13,5 +13,10 @@
   (setq select-enable-clipboard t)
   (delete-selection-mode t)) ;; Replace selection rather than inserting.
 
+(use-package xclip
+  :ensure t
+  :config
+  (xclip-mode 1))
+
 (provide 'my-clipboard)
 ;;; my-clipboard.el ends here

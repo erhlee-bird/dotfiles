@@ -69,9 +69,6 @@
    `(font-lock-variable-name-face ((t (:foreground ,base0C))))
    `(font-lock-warning-face ((t (:foreground ,base08))))
 
-   ;; linum-mode
-   `(linum ((t (:background ,base01 :foreground ,base03))))
-
    ;; Search
    `(match ((t (:foreground ,base0D :background ,base01 :inverse-video t))))
    `(isearch ((t (:foreground ,base0A :background ,base01 :inverse-video t))))
