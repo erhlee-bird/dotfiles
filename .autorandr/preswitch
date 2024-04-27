@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-set -eo pipefail
-
-# NB: Reset the scale for each monitor before changing and reconfiguring them.
-
-xrandr | grep connected | grep -v disconnected | awk '{print $1}' | \
-  xargs -I {} xrandr --output {} --scale 1x1
