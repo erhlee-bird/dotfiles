@@ -20,6 +20,7 @@
 (electric-pair-mode -1)
 
 (use-package highlight-indent-guides
+  :ensure t
   :init
   (setq highlight-indent-guides-method 'character)
   (setq highlight-indent-guides-auto-enabled nil)
@@ -37,6 +38,7 @@
   (add-hook 'before-save-hook #'delete-trailing-whitespace))
 
 (use-package web-mode
+  :ensure t
   :config
   ;; (add-to-list 'auto-mode-alist '("\\.heex\\'" . web-mode))
   (add-hook 'web-mode-hook

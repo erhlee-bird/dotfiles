@@ -34,6 +34,12 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+;; Enable unicode rendering.
+(use-package unicode-fonts
+  :ensure t
+  :config
+  (unicode-fonts-setup))
+
 ;; Rely on the system to open URLs.
 (setq browse-url-browser-function 'browse-url-xdg-open)
 
@@ -47,6 +53,7 @@
 
 (use-package auto-sudoedit :ensure t)
 (auto-sudoedit-mode 1)
+(use-package nix-mode :ensure t)
 
 (add-to-list 'load-path "~/.emacs.d/packages")
 ;; Load any my-prefixed custom packages first.

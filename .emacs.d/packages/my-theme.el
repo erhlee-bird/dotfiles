@@ -6,9 +6,6 @@
 
 ;;; Code:
 
-;; Set our font
-(set-face-attribute 'default nil :family "Inconsolata" :height 120)
-
 ;; Set our theme and set the default frame to have the proper theme.
 ;; Fix for daemon mode.
 (defvar mytheme-theme 'base16-ocean)
