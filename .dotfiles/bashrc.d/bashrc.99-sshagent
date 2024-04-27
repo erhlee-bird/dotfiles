@@ -2,7 +2,7 @@ if command ssh-agent >/dev/null; then
   SSH_DIR="${HOME}/.ssh"
   SSH_ENV="${SSH_DIR}/environment"
   SSH_TMP="${XDG_RUNTIME_DIR:-/tmp}/ssh-agent"
-  if [[ ! -d "${SSH_DIR}" ]]; then
+  if [[ ! -d "${SSH_DIR}/sockets" ]]; then
     mkdir -p $HOME/.ssh/sockets
   fi
 
@@ -35,7 +35,7 @@ if command ssh-agent >/dev/null; then
       # If an ssh-agent is running but we can't connect to it then kill it
       # and start a new one.
       ssh-add -l &>/dev/null
-      if [ ! $? -eq 0 ]; then
+      if [ $? -eq 2 ]; then
           killall ssh-agent;
           start_agent;
       fi
