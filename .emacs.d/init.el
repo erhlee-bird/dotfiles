@@ -79,6 +79,7 @@
 ; (use-package init-erc)
 (use-package init-evil)
 (use-package init-flycheck)
+(use-package init-github)
 (use-package init-ivy)
 (use-package init-lsp)
 ; (use-package init-eglot)
