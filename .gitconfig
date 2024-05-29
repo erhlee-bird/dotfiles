@@ -7,4 +7,5 @@
     name = Eric Lee
 [alias]
     stat = !git diff --stat $(git merge-base HEAD \"$REVIEW_BASE\")
-
+[branch]
+	sort = -commiterdate

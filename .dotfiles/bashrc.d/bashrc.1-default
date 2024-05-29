@@ -1,6 +1,7 @@
 # Common system settings.
 export EDITOR=vim
 export PATH="${HOME}/.local/bin:${PATH}"
+export REVIEW_BASE="main"
 
 # Elixir Tooling.
 export ERL_AFLAGS="-kernel shell_history enabled"
