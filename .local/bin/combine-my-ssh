@@ -1,13 +1,18 @@
 #!/usr/bin/env bash
 
-if [[ ! -d "${HOME}/.ssh/conf.d" ]]; then
+CONF_DIR="${HOME}/.config/ssh/conf.d"
+
+if [[ ! -d "${CONF_DIR}" ]]; then
   echo "No ssh config files available for writing."
   exit 1
 fi
 
-sorted_config_files="$(find "${HOME}/.ssh/conf.d" -type f | grep -v ".gitignore" | sort)"
+sorted_config_files="$(find "${CONF_DIR}" -type f | grep -v ".gitignore" | sort)"
 if [[ ! -z "${sorted_config_files}" ]]; then
-  echo "Combining all ssh config files available in ~/.ssh/conf.d/"
+  echo "Combining all ssh config files available in ${CONF_DIR}/"
+  mkdir -p "${HOME}/.ssh"
+  chmod 600 "${HOME}/.ssh"
+
   cat ${sorted_config_files} > "${HOME}/.ssh/config_combined"
   ln -fs "${HOME}/.ssh/config_combined" "${HOME}/.ssh/config"
   chmod 600 "${HOME}/.ssh/config"
