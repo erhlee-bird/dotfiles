@@ -4,6 +4,7 @@
 .lsp-session-v1
 .org-id-locations
 .python-environments
+*.eln
 abbrev_defs
 async-bytecomp.log
 auto-save-list

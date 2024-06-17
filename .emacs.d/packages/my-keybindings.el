@@ -80,6 +80,22 @@
   (interactive)
   (my-github-checkout (thing-at-point 'filename)))
 
+(defun my-eval-buffer ()
+  "Evaluate the entire buffer."
+  (interactive)
+  (if (and (bound-and-true-p cider-mode)
+           (fboundp 'cider-eval-buffer))
+      (cider-eval-buffer)
+    (eval-buffer)))
+
+(defun my-eval-last-sexp ()
+  "Evalute the last sexp."
+  (interactive)
+  (if (and (bound-and-true-p cider-mode)
+           (fboundp 'cider-eval-sexp-up-to-point))
+      (cider-eval-sexp-up-to-point nil)
+    (eval-last-sexp nil)))
+
 ;; Define space-init-keymap
 (make-map space-init-keymap
           '(("i" 'my-edit-file)
@@ -92,8 +108,9 @@
           '(("b" 'switch-to-buffer)
             ("c" space-ide-keymap)
             ("d" space-display-keymap)
-            ("e" 'eval-last-sexp)
-            ("E" 'eval-buffer)
+            ;; NB: Contextualize the eval based on the mode we're in.
+            ("e" 'my-eval-last-sexp)
+            ("E" 'my-eval-buffer)
             ("f" 'find-file)
             ("F" 'dired)
             ("G" 'my-github-checkout-at-point)

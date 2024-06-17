@@ -6,6 +6,7 @@
     email = erhlee.bird@gmail.com
     name = Eric Lee
 [alias]
+    br = !git branch --format=\"%(HEAD) %(color:green)%(committerdate:relative)%(color:reset) %(refname:short) +%(ahead-behind:$REVIEW_BASE)\"
     stat = !git diff --stat $(git merge-base HEAD \"$REVIEW_BASE\")
 [branch]
 	sort = -committerdate
