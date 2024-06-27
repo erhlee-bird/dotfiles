@@ -3,6 +3,10 @@ export EDITOR=vim
 export PATH="${HOME}/.local/bin:${PATH}"
 export REVIEW_BASE="main"
 
+export LANG="en_US.UTF-8"
+export LANGUAGE="en_US.UTF-8"
+export LC_COLLATE="en_US.UTF-8"
+
 # Elixir Tooling.
 export ERL_AFLAGS="-kernel shell_history enabled"
 

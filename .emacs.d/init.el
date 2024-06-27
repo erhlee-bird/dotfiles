@@ -66,7 +66,10 @@
 (use-package base16-theme
   :ensure t
   :config
-  (setq base16-theme-256-color-source 'colors)
+  (let ((codespaces (getenv "CODESPACES")))
+    (if (and codespaces (string= codespaces "true"))
+      (setq base16-theme-256-color-source 'base16-shell)
+      (setq base16-theme-256-color-source 'colors)))
   (load-theme 'base16-ocean t))
 
 (use-package my-shell)

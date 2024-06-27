@@ -1,21 +1,25 @@
 #!/usr/bin/env bash
 
-CONF_DIR="${HOME}/.config/ssh/conf.d"
+CONF_DIRS=( "${HOME}/.config/ssh/conf.d" "${HOME}/.ssh/conf.d" )
+rm -f "${HOME}/.ssh/config_combined" 2>/dev/null
 
-if [[ ! -d "${CONF_DIR}" ]]; then
-  echo "No ssh config files available for writing."
-  exit 1
-fi
+for conf_dir in "${CONF_DIRS[@]}"; do
+  if [[ ! -d "${conf_dir}" ]]; then
+    echo "[E][${conf_dir}] no such ssh config directory"
+    continue
+  fi
 
-sorted_config_files="$(find "${CONF_DIR}" -type f | grep -v ".gitignore" | sort)"
-if [[ ! -z "${sorted_config_files}" ]]; then
-  echo "Combining all ssh config files available in ${CONF_DIR}/"
-  mkdir -p "${HOME}/.ssh"
-  chmod 600 "${HOME}/.ssh"
+  sorted_config_files="$(find "${conf_dir}" -type f | grep -v ".gitignore" | sort)"
+  if [[ ! -z "${sorted_config_files}" ]]; then
+    echo "[+][${conf_dir}] loading"
+    mkdir -p "${HOME}/.ssh"
+    chmod 700 "${HOME}/.ssh"
 
-  cat ${sorted_config_files} > "${HOME}/.ssh/config_combined"
-  ln -fs "${HOME}/.ssh/config_combined" "${HOME}/.ssh/config"
-  chmod 600 "${HOME}/.ssh/config"
-else
-  echo "No configuration files to combine."
-fi
+    cat ${sorted_config_files} >> "${HOME}/.ssh/config_combined"
+  else
+    echo "[-][${conf_dir}] empty"
+  fi
+done
+
+chmod 600 "${HOME}/.ssh/config"
+ln -fs "${HOME}/.ssh/config_combined" "${HOME}/.ssh/config"
