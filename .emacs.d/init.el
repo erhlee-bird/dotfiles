@@ -77,7 +77,7 @@
 (use-package my-backup)
 
 ;; Load init-prefixed packages that deal with third-party packages.
-;; (use-package init-chatgpt)
+(use-package init-chatgpt)
 (use-package init-company)
 ; (use-package init-erc)
 (use-package init-evil)
