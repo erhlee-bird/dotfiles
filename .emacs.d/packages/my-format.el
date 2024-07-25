@@ -79,7 +79,8 @@
               ; ("l" 'linum-mode)
               ("m" 'mark-whole-buffer)
               ("x" 'hexify)
-              ("z" 'hs-minor-mode)))
+              ("z" 'hs-toggle-hiding)
+              ("Z" 'hs-minor-mode)))
   (make-map vspace-keymap
             '(("A" 'align)
               ("h" 'highlight-region)

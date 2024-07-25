@@ -26,6 +26,7 @@ Context:
 
 (use-package gptel
   :after company
+  :ensure t
   :preface
   (defun company-gptel--get-buffer-content ()
     "Get the content of the current buffer as a string."

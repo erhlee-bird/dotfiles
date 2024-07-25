@@ -115,7 +115,7 @@
             ("F" 'dired)
             ("G" 'my-github-checkout-at-point)
             ("i" space-init-keymap)
-            ("K" 'kill-this-buffer)
+            ("K" 'kill-current-buffer)
             ("m" space-magit-keymap)
             ("o" space-org-keymap)
             ("O" 'occur)

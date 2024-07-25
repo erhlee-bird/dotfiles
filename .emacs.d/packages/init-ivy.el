@@ -3,6 +3,11 @@
 
 ;;; Code:
 
+(use-package counsel
+  :ensure t
+  :init
+  (setq counsel-rg-base-command "rg --hidden --max-columns 240 --with-filename --no-heading --line-number --color=never %s || true"))
+
 (use-package ivy
   :ensure t
   :init
