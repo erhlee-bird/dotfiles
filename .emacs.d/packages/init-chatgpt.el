@@ -28,6 +28,9 @@ Context:
   :after company
   :ensure t
   :preface
+  (defun company-gptel--end-of-response ()
+    (setq gptel-request--done t))
+
   (defun company-gptel--get-buffer-content ()
     "Get the content of the current buffer as a string."
     (buffer-substring-no-properties (point-min) (point-max)))
@@ -41,16 +44,18 @@ Context:
 
   (defun company-gptel--wait-for-suggestion (prompt)
     "Synchronously wait for a PROMPT completion suggestion from the LLM."
-    (setq gptel-request--response nil)
+    (setq gptel-request--response "")
     (setq gptel-request--done nil)
     ;; XXX: This assumes that the gptel library works by returning single
     ;;      responses. Maybe I need to turn the stream option off.
     (gptel-request prompt :callback (lambda (response info)
-                                      (setq gptel-request--response response)
-                                      (setq gptel-request--done t)))
+                                      (setq gptel-request--done t)
+                                      (setq gptel-request--response response)))
+
     ;; Wait for the callback to complete.
     (while (not gptel-request--done)
-      (accept-process-output nil 0.1))
+      (message "%s" gptel-request--response)
+      (sit-for 0.5))
     ;; Post-process the response.
     gptel-request--response)
 
@@ -76,6 +81,9 @@ Context:
                (list (concat arg response)))))))))
 
   :config
+  (add-hook 'gtpel-post-response-functions #'company-gptel--end-of-response)
+
+  (setq gptel-model "gpt-4o")
   (setq gptel-backend (gptel-make-azure "KAI-AI"
                         :protocol "https"
                         :host (getenv "AZURE_OPENAI_ENDPOINT")
@@ -87,7 +95,7 @@ Context:
                           (mapconcat 'identity (list base-url deployment middle-path api-version) ""))
                         :stream t
                         :key (getenv "AZURE_OPENAI_KEY")
-                        :models '("gpt-4o"))))
+                        :models '(gpt-4o))))
 
 (use-package my-keybindings
   :after company evil gptel
