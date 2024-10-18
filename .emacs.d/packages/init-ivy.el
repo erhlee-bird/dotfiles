@@ -27,12 +27,10 @@
   :commands projectile-save-known-projects
   :init
   (setq projectile-enable-caching t)
-  (setq projectile-git-command "rg -0 --files --hidden --color=never")
-  (setq projectile-generic-command "rg -0 --files --hidden --color=never")
-  (setq projectile-indexing-method 'hybrid)
-
   ;; Ripgrep will use .gitignore to ignore files.
-  ;; (add-to-list 'projectile-globally-ignored-directories "*.elixir_ls")
+  (setq projectile-git-command "rg -0 --files --hidden --no-require-git --color=never")
+  (setq projectile-generic-command "rg -0 --files --hidden --no-require-git --color=never")
+  (setq projectile-indexing-method 'alien)
   :config
   (projectile-mode +1)
   (defun my-projectile-add-known-project ()
