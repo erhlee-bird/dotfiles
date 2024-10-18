@@ -11,12 +11,15 @@
   :after projectile
   :commands lsp-format-buffer
   :defines lsp-message-project-root-warning
+  :init
+  (add-hook 'prog-mode-hook #'lsp)
   :config
   (setq-default lsp-pyls-configuration-sources ["flake8"])
   (setq lsp-completion-enable t)
   (setq lsp-enable-file-watchers nil)
   (setq lsp-enable-indentation t)
   (setq lsp-enable-snippet nil)
+  (setq lsp-enable-suggest-server-download nil)
   (setq lsp-lens-enable t)
   (setq lsp-message-project-root-warning t))
 
@@ -30,7 +33,7 @@
   :ensure t
   :after (lsp-mode flycheck)
   :init
-                                        ; lsp-ui lags horribly with larger projects.
+  ;; lsp-ui lags horribly with larger projects.
   (add-hook 'lsp-mode-hook 'lsp-ui-mode)
   :config
   (setq lsp-ui-doc-enable t))
@@ -68,12 +71,6 @@
   :commands lsp-haskell-enable
   :init
   (add-hook 'haskell-mode-hook 'lsp-haskell-enable))
-
-(use-package lsp-tailwindcss
-  :after lsp-mode
-  :ensure t
-  :init
-  (add-hook 'before-save-hook 'lsp-tailwindcss-rustywind-before-save))
 
 (use-package my-keybindings
   :commands make-map

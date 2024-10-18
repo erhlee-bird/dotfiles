@@ -99,6 +99,9 @@
                         (directory . emacs)
                         (system . "setsid -w xdg-open %s")
                         (t . system)))
+  ;; Load babel functionality.
+  (org-babel-do-load-languages
+   'org-babel-load-languages '((shell . t)))
   :config
   (unless (not (null org-agenda-files))
     (setq org-agenda-files (cons org-default-notes-file nil))))
@@ -122,6 +125,9 @@
   (make-map space-org-keymap
             '(("a" space-org-agenda-keymap)
               ("A" 'org-insert-heading-after-current)
+              ("b" (lambda ()
+                     (interactive)
+                     (org-insert-structure-template "src")))
               ("c" 'org-capture)
               ("e" 'org-export-dispatch)
               ("f" 'org-switchb)
