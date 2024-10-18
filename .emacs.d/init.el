@@ -7,6 +7,9 @@
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file 'noerror)
 
+(require 'warnings)
+(setq warning-minimum-level :error)
+
 ;; Setup package.
 (require 'package)
 (setq package-enable-at-startup nil)
