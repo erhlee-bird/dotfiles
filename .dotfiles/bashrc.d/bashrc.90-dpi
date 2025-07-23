@@ -1,4 +1,4 @@
-if command -v xset >/dev/null 2>&1; then
+if [[ -z "$WAYLAND_DISPLAY" ]] && command -v xset >/dev/null 2>&1; then
   export DPI_DAMPENING="${DPI_DAMPENING:-0.91}"
 
   # Detect Screen Resolution and adjust dpi.

@@ -13,9 +13,9 @@ export ERL_AFLAGS="-kernel shell_history enabled"
 # Fzf.
 export FZF_COMPLETION_OPTS="--exact"
 export FZF_DEFAULT_COMMAND="rg --files | xargs dirname | sort -u"
-if [[ -n "$(readlink $(which fzf))" ]]; then
-  ln -fs "$(dirname $(readlink $(which fzf)))/../share/fzf/completion.bash" \
-         "${HOME}/.local/share/bash-completion/completions/"
+if command -v fzf-share >/dev/null; then
+  . "$(fzf-share)/key-bindings.bash"
+  . "$(fzf-share)/completion.bash"
 fi
 
 # Golang Tooling.
