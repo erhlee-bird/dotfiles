@@ -9,6 +9,9 @@
     name = Eric Lee
 [alias]
     br = !git branch --format=\"%(HEAD) %(color:green)%(committerdate:relative)%(color:reset) %(refname:short) +%(ahead-behind:$REVIEW_BASE)\"
+    gone = !git branch -vv | grep ': gone]' | awk '{print $1}'
     stat = !git diff --stat $(git merge-base HEAD \"$REVIEW_BASE\")
 [branch]
-	sort = -committerdate
+    sort = -committerdate
+[url "git@github.com:"]
+    insteadOf = "https://github.com/"
