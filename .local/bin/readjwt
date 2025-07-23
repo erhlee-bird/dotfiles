@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+jq -R 'split(".") | .[1] | @base64d | fromjson' <<< "$1"
