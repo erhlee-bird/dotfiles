@@ -7,17 +7,39 @@
 ;;; Code:
 
 (use-package undo-tree
-  :ensure t
-  :init
-  (global-undo-tree-mode)
-  (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo"))))
+  :custom
+  (undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
+  :diminish ""
+  :hook
+  (after-init . global-undo-tree-mode))
 
 (use-package evil
-  :ensure t
   :after undo-tree
-  :commands evil-next-line evil-previous-line evil-delay
+  :bind
+  (:map evil-normal-state-map
+                                        ; Move down visual lines.
+	    ("j" . evil-next-visual-line)
+	    ("k" . evil-previous-visual-line)
+                                        ; Swap lines up and down.
+	    ("C-k" . (lambda () (interactive) (my-swap-line "up")))
+	    ("C-j" . (lambda () (interactive) (my-swap-line "down")))
+                                        ; Buffer movement.
+	    ("<right>" . next-buffer)
+	    ("<left>" . previous-buffer)
+	    :map space-keymap
+	    ("h" . evil-window-left)
+	    ("j" . evil-window-down)
+	    ("k" . evil-window-up)
+	    ("l" . evil-window-right)
+	    ("v" . evil-window-vsplit)
+	    ("V" . evil-window-split))
+  :commands evil-next-line evil-previous-line evil-set-undo-system
+  :defines space-keymap vspace-keymap
+  :init
+  (evil-mode t)
+  (evil-set-undo-system 'undo-tree)
   :preface
-  ; Utility line swap function.
+                                        ; Utility line swap function.
   (defun my-swap-line (direction)
     "Swap the current line in the DIRECTION specified (up/down)."
     (interactive)
@@ -27,25 +49,12 @@
     (if (string= direction "down")
         (evil-previous-line 1)
       (evil-previous-line 2)))
-  :init
-  (evil-mode t)
-  (evil-set-undo-system 'undo-tree)
-  (setq evil-default-cursor t)
   :config
-  ; Enable code folding.
-  ; (hs-minor-mode t)
-  ; Move down visual lines.
-  (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
-  (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
-  ; Swap lines up and down.
-  (define-key evil-normal-state-map (kbd "C-k")
-    (lambda () (interactive) (my-swap-line "up")))
-  (define-key evil-normal-state-map (kbd "C-j")
-    (lambda () (interactive) (my-swap-line "down")))
-  ; Buffer movement.
-  (define-key evil-normal-state-map (kbd "<right>") 'next-buffer)
-  (define-key evil-normal-state-map (kbd "<left>") 'previous-buffer)
-  ; ESC should always quit: http://stackoverflow.com/10166400/61435
+                                        ; Enable code folding.
+                                        ; (hs-minor-mode t)
+  (define-key evil-normal-state-map (kbd "SPC") space-keymap)
+  (define-key evil-visual-state-map (kbd "SPC") vspace-keymap)
+                                        ; ESC should always quit: http://stackoverflow.com/10166400/61435
   (define-key evil-normal-state-map [escape] 'keyboard-quit)
   (define-key evil-visual-state-map [escape] 'keyboard-quit)
   (define-key minibuffer-local-map [escape] 'abort-recursive-edit)
@@ -53,7 +62,7 @@
   (define-key minibuffer-local-completion-map [escape] 'abort-recursive-edit)
   (define-key minibuffer-local-must-match-map [escape] 'abort-recursive-edit)
   (define-key minibuffer-local-isearch-map [escape] 'abort-recursive-edit)
-  ; Add hjkl bindings to Emacs.
+                                        ; Add hjkl bindings to Emacs.
   (evil-add-hjkl-bindings occur-mode-map 'emacs
     (kbd "gg") 'evil-goto-first-line
     (kbd "G") 'evil-goto-line
@@ -68,7 +77,7 @@
     (kbd "?") 'evil-search-backward
     (kbd "n") 'evil-search-next
     (kbd "N") 'evil-search-previous)
-  ; Modes that should use Emacs state.
+                                        ; Modes that should use Emacs state.
   (dolist (mode '(cider-stacktrace-mode
                   cider-test-report-mode
                   dired-mode
@@ -77,29 +86,13 @@
                   git-rebase-mode
                   term-mode))
     (add-to-list 'evil-emacs-state-modes mode))
-  ; Fix for evil overwriting Ctrl+D in term mode.
-  (delete 'term-mode evil-insert-state-modes))
-
-(use-package ivy
-  :after evil
-  :config
-  (define-key ivy-minibuffer-map [escape] 'minibuffer-keyboard-quit))
-
-(use-package my-keybindings
-  :after evil
-  :defines space-keymap vspace-keymap
-  :init
-  (setq evil-split-window-below t)
-  (setq evil-vsplit-window-right t)
-  :config
-  (define-key evil-normal-state-map (kbd "SPC") space-keymap)
-  (define-key evil-visual-state-map (kbd "SPC") vspace-keymap)
-  (define-key space-keymap (kbd "h") 'evil-window-left)
-  (define-key space-keymap (kbd "j") 'evil-window-down)
-  (define-key space-keymap (kbd "k") 'evil-window-up)
-  (define-key space-keymap (kbd "l") 'evil-window-right)
-  (define-key space-keymap (kbd "v") 'evil-window-vsplit)
-  (define-key space-keymap (kbd "V") 'evil-window-split))
+                                        ; Fix for evil overwriting Ctrl+D in term mode.
+  (delete 'term-mode evil-insert-state-modes)
+  :custom
+  (evil-default-cursor t)
+  (evil-shift-round nil)
+  (evil-split-window-below t)
+  (evil-vsplit-window-right t))
 
 (provide 'init-evil)
 ;;; init-evil.el ends here

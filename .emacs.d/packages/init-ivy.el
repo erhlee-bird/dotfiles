@@ -4,23 +4,34 @@
 ;;; Code:
 
 (use-package counsel
-  :ensure t
-  :init
-  (setq counsel-rg-base-command "rg --hidden --max-columns 240 --with-filename --no-heading --line-number --color=never %s || true"))
+  :config
+  (setq counsel-rg-base-command (mapconcat 'identity
+                                           '("rg"
+                                             "--color=never"
+                                             "--hidden"
+                                             "--line-number"
+                                             "--max-columns 240"
+                                             "--no-heading"
+                                             "--with-filename"
+                                             "%s"
+                                             "|| true")
+                                           " "))
+  :hook (after-init . projectile-mode))
 
 (use-package ivy
-  :ensure t
-  :init
-  (setq ivy-use-virtual-buffers t)    ; Add recent files and bookmarks.
-  (setq ivy-count-format "(%d/%d)")
-  (setq ivy-wrap t)
-  :config
-  (ivy-mode 1))
+  :bind
+  (:map ivy-minibuffer-map
+	    ("ESC" . minibuffer-keyboard-quit))
+  :custom
+  (ivy-count-format "(%d/%d)")
+  (ivy-use-virtual-buffers t)    ; Add recent files and bookmarks.
+  (ivy-wrap t)
+  :hook (after-init . ivy-mode))
 
 (use-package magit
   :after ivy
-  :config
-  (setq magit-completing-read-function 'ivy-completing-read))
+  :custom
+  (magit-completing-read-function 'ivy-completing-read))
 
 (use-package projectile
   :after ivy

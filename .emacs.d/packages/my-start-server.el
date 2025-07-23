@@ -9,17 +9,16 @@
 ;;; Code:
 
 (use-package server
-  :ensure t
   :commands server-start
+  :custom
+  (server-socket-dir "/tmp/emacs")
+  :hook (after-init . my-start-server)
   :preface
   (defun my-start-server ()
     (interactive)
     (unless (and (fboundp 'server-running-p)
                  (server-running-p))
-      (server-start)))
-  :config
-  (setq server-socket-dir "/tmp/emacs")
-  (add-hook 'after-init-hook 'my-start-server))
+      (server-start))))
 
 (provide 'my-start-server)
 ;;; my-start-server.el ends here

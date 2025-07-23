@@ -19,21 +19,24 @@
                                          (horizontal-scroll-bars . nil)))))
 (show-paren-mode 1)
 
-; Set frame background color.
+                                        ; Set frame background color.
 (setq frame-background-mode 'dark)
 
-; Set Line Numbers
+                                        ; Set Line Numbers
 (global-display-line-numbers-mode 1)
 (column-number-mode 1)
 
-;; Switch to new split buffers
-(defadvice split-window (after move-point-to-new-window activate)
+(define-advice split-window (:after (&rest _) split-and-switch)
   "Move the point to the newly created window after splitting."
   (other-window 1))
-
-;; Prefer splitting vertically.
+                                        ; Prefer splitting vertically.
 (setq split-height-threshold 1)
 (setq split-width-threshold 100)
+
+                                        ; Open things only in the current window.
+(use-package current-window-only
+  :init
+  (current-window-only-mode t))
 
 (provide 'my-display)
 ;;; my-display.el ends here

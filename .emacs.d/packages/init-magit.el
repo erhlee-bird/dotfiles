@@ -4,25 +4,18 @@
 ;;; Code:
 
 (use-package magit
-  :ensure t
-  :config
-  (setq magit-display-buffer-function
-        'magit-display-buffer-same-window-except-diff-v1)
-  (setq magit-log-arguments '("-n10" "--color" "--graph" "--decorate" "--patch")))
-
-(use-package my-keybindings
-  :after magit
-  :commands make-map
-  :defines space-magit-keymap
-  :config
-  (make-map space-magit-keymap
-            '(("f" 'magit-file-popup)
-              ("m" 'magit-status)
-              ("n" 'smerge-next)
-              ("p" 'smerge-prev)
-              ("<" 'smerge-keep-mine)
-              (">" 'smerge-keep-other)
-              )))
+  :bind
+  (:map space-magit-keymap
+        ("f" . magit-file-popup)
+        ("m" . magit-status)
+        ("n" . smerge-next)
+        ("p" . smerge-prev)
+        ("<" . smerge-keep-upper)
+        (">" . smerge-keep-lower))
+  :custom
+  (magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
+  (magit-log-arguments '("-n10" "--color" "--graph" "--decorate" "--patch"))
+  :defines space-magit-keymap)
 
 (provide 'init-magit)
 ;;; init-magit.el ends here

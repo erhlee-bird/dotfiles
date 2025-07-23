@@ -7,16 +7,16 @@
 ;;; Code:
 
 (use-package select
-  :ensure t
-  :config
-  (setq select-enable-primary t)
-  (setq select-enable-clipboard t)
-  (delete-selection-mode t)) ;; Replace selection rather than inserting.
+  :custom
+  (select-enable-primary t)
+  (select-enable-clipboard t)
+  :hook
+  ;; Replace selection rather than inserting.
+  (after-init . delete-selection-mode))
 
 (use-package xclip
-  :ensure t
-  :config
-  (xclip-mode 1))
+  :hook
+  (after-init . xclip-mode))
 
 (provide 'my-clipboard)
 ;;; my-clipboard.el ends here

@@ -127,6 +127,12 @@
             (";" 'comment-line)
             ("TAB" 'indent-relative)))
 
+;; Define space-org-keymap
+(make-map space-org-keymap
+          '(("a" space-org-agenda-keymap)
+            ("t" space-org-time-keymap)
+            ("T" space-org-table-keymap)))
+
 ;; Define vspace-keymap
 (make-map vspace-keymap
           '(("a" 'align-regexp)

@@ -7,12 +7,12 @@
 ;;; Code:
 
 (use-package markdown-mode
-  :ensure t
   :commands (markdown-mode gfm-mode)
+  :custom
+  (markdown-command "pandoc")
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode))
-  :init (setq markdown-command "pandoc"))
+         ("\\.markdown\\'" . markdown-mode)))
 
 (provide 'init-markdown)
 ;;; init-markdown.el ends here

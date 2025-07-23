@@ -6,17 +6,17 @@
 
 ;;; Code:
 
-(defadvice term-sentinel (around my-advice-term-sentinel (proc msg))
-  "Kill the terminal buffer after it's done rather than leaving it."
+(defun term-sentinel--kill-this-buffer (_orig-function proc _msg)
+  "Kill PROC's terminal buffer after it's done rather than leaving it."
   (if (memq (process-status proc) '(signal exit))
       (let ((buffer (process-buffer proc)))
-        ad-do-it
+        #'(_orig-function proc _msg)
         (kill-buffer buffer))
-    ad-do-it))
-(ad-activate 'term-sentinel)
+    #'(_orig-function proc _msg)))
+(advice-add 'term-sentinel :around #'term-sentinel--kill-this-buffer)
 
 (defun spawn-new-shell ()
-  "Spawn separate 'term' instances."
+  "Spawn separate \='term' instances."
   (interactive)
   (ansi-term "bash"))
 
@@ -30,14 +30,13 @@
   "Spawn a shell in the git directory."
   (interactive)
   (let ((dir (locate-dominating-file default-directory ".git")))
-    (when dir
-      (spawn-shell-in (file-name-directory dir)))))
+    (if dir
+        (spawn-shell-in (file-name-directory dir))
+      (spawn-new-shell))))
 
-(use-package my-keybindings
-  :defines space-keymap
-  :config
-  (define-key space-keymap (kbd "t") 'spawn-shell-in-git-dir)
-  (define-key space-keymap (kbd "T") 'spawn-new-shell))
+;; (defvar space-keymap)
+(define-key space-keymap (kbd "t") #'spawn-shell-in-git-dir)
+(define-key space-keymap (kbd "T") #'spawn-new-shell)
 
 (provide 'my-shell)
 ;;; my-shell.el ends here

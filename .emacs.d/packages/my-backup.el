@@ -9,9 +9,10 @@
 (setq auto-save-default nil)
 (setq backup-by-copying t)
 (setq backup-directory-alist `(("." . "~/.emacs.d/saves")))
-(global-auto-revert-mode t)  ;; Reload automatically from disk.
 (setq make-backup-files t)
 (setq vc-follow-symlinks t)
+
+(global-auto-revert-mode t)  ;; Reload automatically from disk.
 
 (provide 'my-backup)
 ;;; my-backup.el ends here

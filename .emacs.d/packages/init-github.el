@@ -4,21 +4,19 @@
 ;;; Code:
 
 (use-package codespaces
-  :ensure t
+  :bind
+  (:map space-ide-keymap
+        ("C" . codespaces-connect))
+  :commands codespaces-setup
   :config
-  (codespaces-setup)
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+  (codespaces-setup)
+  :custom
   ;; Assumes that you've setup ControlMaster in ~/.ssh/config.
-  (setq tramp-ssh-controlmaster-options "")
-  (setq vc-handled-backends '(Git)))
-
-(use-package my-keybindings
-  :after codespaces
-  :commands make-map
-  :defines space-ide-keymap
-  :config
-  (make-map space-ide-keymap
-            '(("C" #'codespaces-connect))))
+  (tramp-ssh-controlmaster-options "")
+  (vc-handled-backends '(Git))
+  :defer 2
+  :defines space-ide-keymap)
 
 (provide 'init-github)
 ;;; init-github.el ends here

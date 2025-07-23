@@ -20,27 +20,29 @@
 (electric-pair-mode -1)
 
 (use-package highlight-indent-guides
-  :ensure t
-  :init
-  (setq highlight-indent-guides-method 'character)
-  (setq highlight-indent-guides-auto-enabled nil)
-  ;; (set-face-foreground 'highlight-indent-guides-character-face "lightgray")
-  )
+  :custom
+  (highlight-indent-guides-method 'character)
+  (highlight-indent-guides-auto-enabled nil)
+  :hook
+  (yaml-mode . highlight-indent-guides-mode))
 
 ;; Whitespace
 (use-package whitespace
+  :custom
+  (whitespace-line-column 80)
+  (whitespace-style '(face tabs trailing))
+  :hook
+  (before-save . delete-trailing-whitespace)
   :init
-  (global-whitespace-mode t)
+  (global-whitespace-mode t))
+
+;; Enable unicode rendering.
+(use-package unicode-fonts
   :config
-  (setq whitespace-line-column 80)
-  (setq whitespace-style '(face tabs trailing))
-  ;; (setq whitespace-style '(face tabs lines-tail trailing))
-  (add-hook 'before-save-hook #'delete-trailing-whitespace))
+  (unicode-fonts-setup))
 
 (use-package web-mode
-  :ensure t
   :config
-  ;; (add-to-list 'auto-mode-alist '("\\.heex\\'" . web-mode))
   (add-hook 'web-mode-hook
             (lambda ()
               (add-hook 'before-save-hook 'web-mode-buffer-indent nil 'local)))

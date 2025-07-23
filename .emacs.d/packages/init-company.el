@@ -7,21 +7,18 @@
 ;;; Code:
 
 (use-package company
-  :ensure t
+  :bind
+  (:map space-ide-keymap
+        ("TAB" . company-complete))
+  :custom
+  (company-idle-delay 0.2)
+  (company-tooltip-idle-delay 0.2)
+  (company-minimum-prefix-length 1)
+  :defer 2
+  :defines space-ide-keymap
   :diminish ""
   :init
-  (global-company-mode)
-  :config
-  (setq company-idle-delay 0.2
-        company-tooltip-idle-delay 0.2
-        company-minimum-prefix-length 3))
-
-(use-package my-keybindings
-  :commands make-map
-  :defines space-ide-keymap
-  :config
-  (make-map space-ide-keymap
-            '(("TAB" #'company-complete))))
+  (global-company-mode))
 
 (provide 'init-company)
 ;;; init-company.el ends here
