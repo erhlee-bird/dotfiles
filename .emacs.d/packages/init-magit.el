@@ -11,7 +11,9 @@
         ("n" . smerge-next)
         ("p" . smerge-prev)
         ("<" . smerge-keep-upper)
-        (">" . smerge-keep-lower))
+        (">" . smerge-keep-lower)
+        :map transient-map
+        ("<escape>" . transient-quit-one))
   :custom
   (magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
   (magit-log-arguments '("-n10" "--color" "--graph" "--decorate" "--patch"))

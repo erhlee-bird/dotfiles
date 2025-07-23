@@ -113,8 +113,8 @@
 	    :map space-keymap
 	    ("/" . consult-ripgrep))
   :custom
-  (consult-preview-key any)
-  :defines evil-normal-state-map space-keymap)
+  (consult-preview-key 'any)
+  :defines (evil-normal-state-map space-keymap))
 
 (use-package base16-theme
   :config
@@ -151,6 +151,7 @@
 
 ;; Load init-prefixed packages that deal with third-party packages.
 
+(use-package init-aider :ensure nil)
 (use-package init-chatgpt :ensure nil)
 (use-package init-company :ensure nil)
 ;; (use-package init-erc :ensure nil)

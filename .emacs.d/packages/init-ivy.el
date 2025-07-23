@@ -21,7 +21,7 @@
 (use-package ivy
   :bind
   (:map ivy-minibuffer-map
-	    ("ESC" . minibuffer-keyboard-quit))
+	    ("<escape>" . minibuffer-keyboard-quit))
   :custom
   (ivy-count-format "(%d/%d)")
   (ivy-use-virtual-buffers t)    ; Add recent files and bookmarks.
