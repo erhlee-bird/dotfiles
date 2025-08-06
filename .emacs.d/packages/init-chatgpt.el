@@ -64,7 +64,6 @@ Now, complete this code snippet:
 %s")
 
 (use-package gptel
-  :after (company evil)
   :bind
   (:map evil-insert-state-map
         ("M-a" . company-suggest-gptel)
@@ -157,7 +156,7 @@ Now, complete this code snippet:
   ;; (list (concat arg response)))))))))
 
   :custom
-  (gptel-model "gpt-4o")
+  (gptel-model "o4-mini")
   (gptel-backend (gptel-make-azure "KAI-AI"
                    :protocol "https"
                    :host (getenv "AZURE_OPENAI_ENDPOINT")

@@ -56,7 +56,7 @@
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 6))
+      (bootstrap-version 7))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
         (url-retrieve-synchronously
@@ -99,6 +99,13 @@
 	    ("/" . vertico-insert))
   :ensure nil)
 
+(use-package marginalia
+  :bind
+  (:map minibuffer-local-map
+        ("M-a" . marginalia-cycle))
+  :init
+  (marginalia-mode))
+
 (use-package orderless
   :custom
   (completion-styles '(flex orderless basic))
@@ -116,6 +123,47 @@
   (consult-preview-key 'any)
   :defines (evil-normal-state-map space-keymap))
 
+(use-package corfu
+  :custom
+  (corfu-auto t)
+  (corfu-cycle t)
+  (corfu-preview-current t)
+  :init
+  (global-corfu-mode))
+
+(when (< emacs-major-version 31)
+  (straight-use-package
+   '(corfu-terminal
+     :type git
+     :repo "https://codeberg.org/akib/emacs-corfu-terminal.git"))
+  (unless (display-graphic-p)
+    (corfu-terminal-mode +1)))
+
+(use-package eglot
+  :bind
+  (:map space-ide-keymap
+        ("SPC" . eglot-code-actions)
+        ("f" . eglot-format)
+        ("d" . xref-find-definitions)
+        ("x" . xref-go-back))
+  :defines space-ide-keymap
+  :hook
+  (prog-mode . eglot-ensure))
+
+(use-package eglot-booster
+  :straight (eglot-booster :type git :host nil :repo "https://github.com/jdtsmith/eglot-booster")
+  :after eglot
+  :config (eglot-booster-mode))
+
+(use-package eldoc
+  :init
+  (global-eldoc-mode))
+
+(use-package emacs
+  :custom
+  (tab-always-indent 'complete)
+  (read-extended-command-predicate #'command-completion-default-include-p))
+
 (use-package base16-theme
   :config
   (let ((codespaces (getenv "CODESPACES")))
@@ -123,6 +171,9 @@
 	    (setq base16-theme-256-color-source 'base16-shell)
       (setq base16-theme-256-color-source 'colors)))
   (load-theme 'base16-ocean t))
+
+(use-package rainbow-mode :diminish)
+(use-package vterm)
 
 ;; Load any my-prefixed custom packages first.
 
@@ -142,6 +193,10 @@
                                         ; Rely on the system to open URLs.
 (setq browse-url-browser-function 'browse-url-xdg-open)
 
+                                        ; Enable which-key support.
+;; (which-key-mode 1)
+;; (setq-default which-key-idle-delay 0.3)
+
                                         ; Add Python to org-babel.
 (org-babel-do-load-languages 'org-babel-load-languages '((python . t)))
 
@@ -149,7 +204,8 @@
                                         ; inputs XF86AudioPause as raw key events
 (global-set-key (kbd "<ESC>[57429u") 'ignore)
 
-;; Load init-prefixed packages that deal with third-party packages.
+                                        ; Load init-prefixed packages that deal
+                                        ; with third-party packages.
 
 (use-package init-aider :ensure nil)
 (use-package init-chatgpt :ensure nil)
@@ -158,7 +214,7 @@
 (use-package init-flycheck :ensure nil)
 (use-package init-github :ensure nil)
 ;; (use-package init-ivy :ensure nil)
-(use-package init-lsp :ensure nil)
+;; (use-package init-lsp :ensure nil)
 (use-package init-magit :ensure nil)
 (use-package init-markdown :ensure nil)
 (use-package init-org :ensure nil)
@@ -173,7 +229,9 @@
 	      (lambda ()
 	        (add-hook 'before-save-hook
 		              (lambda ()
-			            (indent-region (point-min) (point-max))))))
+			            (indent-region (point-min) (point-max)))
+                      nil
+                      :local)))
 
 (use-package cc-mode
   :after flycheck
@@ -182,30 +240,30 @@
   (c++-mode . (lambda ()
                 (setq flycheck-gcc-language-standard "c++11"))))
 
-(use-package cider
-  :after lsp-mode
-  :commands lsp-format-buffer
-  :config
-  (set-variable 'cider-lein-parameters (concat "with-profile +dev repl :headless"))
-  :custom
-  (cider-test-show-report-on-success t)
-  :hook
-  (clojure-mode . cider-mode)
-  (clojure-mode . (lambda ()
-                    (add-hook 'before-save-hook #'lsp-format-buffer))))
+;; (use-package cider
+;;   :after lsp-mode
+;;   :commands lsp-format-buffer
+;;   :config
+;;   (set-variable 'cider-lein-parameters (concat "with-profile +dev repl :headless"))
+;;   :custom
+;;   (cider-test-show-report-on-success t)
+;;   :hook
+;;   (clojure-mode . cider-mode)
+;;   (clojure-mode . (lambda ()
+;;                     (add-hook 'before-save-hook #'lsp-format-buffer nil :local))))
 
-(use-package elixir-mode
-  :after lsp-mode
-  :hook
-  (elixir-mode . lsp-deferred)
-  (elixir-mode . (lambda ()
-                   (add-hook 'before-save-hook 'elixir-format nil :local))))
+;; (use-package elixir-mode
+;;   :after lsp-mode
+;;   :hook
+;;   (elixir-mode . lsp-deferred)
+;;   (elixir-mode . (lambda ()
+;;                    (add-hook 'before-save-hook 'elixir-format nil :local))))
 
-(use-package lsp-haskell
-  :after lsp-mode
-  :commands lsp-haskell-enable
-  :hook
-  (haskell-mode . lsp-haskell-enable))
+;; (use-package lsp-haskell
+;;   :after lsp-mode
+;;   :commands lsp-haskell-enable
+;;   :hook
+;;   (haskell-mode . lsp-haskell-enable))
 
 (use-package nix-mode :mode "\\.nix\\'")
 (use-package yaml-mode)

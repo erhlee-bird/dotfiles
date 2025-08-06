@@ -7,9 +7,6 @@
 ;;; Code:
 
 (use-package company
-  :bind
-  (:map space-ide-keymap
-        ("TAB" . company-complete))
   :custom
   (company-idle-delay 0.2)
   (company-tooltip-idle-delay 0.2)

@@ -13,5 +13,7 @@
     stat = !git diff --stat $(git merge-base HEAD \"$REVIEW_BASE\")
 [branch]
     sort = -committerdate
-[url "git@github.com:"]
-    insteadOf = "https://github.com/"
+[credential "https://github.com"]
+    helper = !/usr/bin/env gh auth git-credential
+[credential "https://gist.github.com"]
+    helper = !/usr/bin/env gh auth git-credential

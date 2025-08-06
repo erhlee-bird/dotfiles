@@ -6,8 +6,17 @@
 (use-package aidermacs
   :bind
   (:map space-keymap
+        ("!" . aidermacs-transient-menu)
+        ("@" . aidermacs-switch-to-buffer)
+        ("#" . aidermacs-open-prompt-file)
+        :map vspace-keymap
         ("!" . aidermacs-transient-menu))
-  :defines space-keymap)
+  :custom
+  (aidermacs-backend 'vterm)
+  (aidermacs-exit-kills-buffer t)
+  (aidermacs-show-diff-after-change t)
+  (aidermacs-watch-files t)
+  :defines space-keymap vspace-keymap)
 
 (provide 'init-aider)
 ;;; init-aider.el ends here

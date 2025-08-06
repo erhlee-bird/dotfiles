@@ -18,8 +18,9 @@
                                       " "))
   :hook (after-init . projectile-mode))
 
+;; TODO: Want to add a way to sort files in projectile-find-file by updated
+;;       timestamp and most frequently visited.
 (use-package projectile
-  :after dash
   :bind
   (:map space-keymap
         ("SPC" . projectile-find-file)
@@ -37,8 +38,16 @@
   :custom
   (projectile-enable-caching t)
   ;; Ripgrep will use .gitignore to ignore files.
-  (projectile-git-command "rg -0 --files --hidden --no-require-git --color=never")
-  (projectile-generic-command "rg -0 --files --hidden --no-require-git --color=never")
+  (projectile-git-command (mapconcat 'identity
+                                     '("rg"
+                                       "-0"
+                                       "--color=never"
+                                       "--files"
+                                       "--glob=!.git/"
+                                       "--hidden"
+                                       "--no-require-git")
+                                     " "))
+  (projectile-generic-command projectile-git-command)
   (projectile-indexing-method 'alien)
   :defines (space-keymap
             space-projectile-keymap)

@@ -22,6 +22,7 @@
              lsp-format-buffer)
   :custom
   (lsp-completion-enable t)
+  (lsp-completion-provier :none) ;; we use Corfu!
   (lsp-enable-file-watchers nil)
   (lsp-enable-indentation t)
   (lsp-enable-snippet nil)
