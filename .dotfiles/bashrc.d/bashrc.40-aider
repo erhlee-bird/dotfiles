@@ -1,3 +1,4 @@
+export AIDER_ANALYTICS_DISABLE="True"
 export AIDER_AUTO_ACCEPT_ARCHITECT="False"
 export AIDER_EDITOR_MODEL="azure/gpt-4.1-mini"
 export AIDER_MODEL="azure/o4-mini"
