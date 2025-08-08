@@ -1,0 +1,8 @@
+- name: azure/gpt-5
+  use_temperature: 1
+- name: azure/gpt-5-chat
+  use_temperature: 1
+- name: azure/gpt-5-mini
+  use_temperature: 1
+- name: azure/gpt-5-nano
+  use_temperature: 1
