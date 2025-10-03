@@ -10,8 +10,7 @@
   :custom
   (undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
   :diminish ""
-  :hook
-  (after-init . global-undo-tree-mode))
+  :hook (after-init . global-undo-tree-mode))
 
 (use-package evil
   :after undo-tree

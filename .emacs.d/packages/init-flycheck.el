@@ -8,8 +8,7 @@
   (:map space-ide-keymap ("c" . flycheck-next-error))
   :defer 2
   :defines space-ide-keymap
-  :init
-  (global-flycheck-mode))
+  :hook (after-init . global-flycheck-mode))
 
 (provide 'init-flycheck)
 ;;; init-flycheck.el ends here

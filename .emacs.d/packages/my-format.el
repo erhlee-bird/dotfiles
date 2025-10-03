@@ -38,18 +38,24 @@
 
 ;; Enable unicode rendering.
 (use-package unicode-fonts
-  :config
-  (unicode-fonts-setup))
+  :hook (after-init . unicode-fonts-setup))
 
 (use-package web-mode
-  :config
+  :defer t
+  :custom
   (add-hook 'web-mode-hook
             (lambda ()
-              (add-hook 'before-save-hook 'web-mode-buffer-indent nil 'local)))
-  :custom
+              (add-hook 'before-save-hook
+                        'web-mode-buffer-indent nil 'local)))
   (web-mode-markup-indent-offset 2)
   (web-mode-css-indent-offset 2)
   (web-mode-code-indent-offset 2))
+
+(use-package doom-modeline
+  :ensure t
+  :custom
+  (doom-modeline-support-imenu t)
+  :hook after-init)
 
 (use-package my-keybindings
   :after whitespace
@@ -78,7 +84,7 @@
               ("h" 'highlight-symbol-at-point)
               ("H" 'unhighlight-regexp)
               ("i" 'highlight-indent-guides-mode)
-              ; ("l" 'linum-mode)
+                                        ; ("l" 'linum-mode)
               ("m" 'mark-whole-buffer)
               ("x" 'hexify)
               ("z" 'hs-toggle-hiding)

@@ -93,7 +93,7 @@
     (projectile-save-known-projects)
     (message "Finished Indexing GitHub projects.")))
 
-(use-package counsel-projectile)
+(use-package counsel-projectile :defer t)
 
 (provide 'init-projectile)
 ;;; init-projectile.el ends here

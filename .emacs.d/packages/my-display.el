@@ -35,8 +35,12 @@
 
                                         ; Open things only in the current window.
 (use-package current-window-only
+  :commands (current-window-only--delete-other-windows)
   :init
-  (current-window-only-mode t))
+  (current-window-only-mode t)
+  ;; Without this, delete-other-windows doesn't work.
+  (let ((override #'current-window-only--delete-other-windows))
+    (advice-remove 'delete-other-windows override)))
 
 (provide 'my-display)
 ;;; my-display.el ends here

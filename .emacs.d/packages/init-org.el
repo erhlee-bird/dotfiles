@@ -24,11 +24,16 @@
         ("O" . my-org-open-at-point)
         ("p" . org-insert-link)
         ("r" . org-refile)
+        ;; Bind tag search and corresponding open all headings keybindings.
+        ("t" . org-tags-sparse-tree)
+        ("T" . (lambda ()
+                 (interactive)
+                 (org-cycle-set-startup-visibility)))
         ("s" . org-store-link)
         ("v" . org-cycle)
         ("V" . org-global-cycle)
         ("&" . org-mark-ring-goto)
-        ("/" . org-match-sparse-time)
+        ("/" . org-occur)
         ("DEL" . org-mark-ring-goto)
         :map space-org-agenda-keymap
         ("A" . org-agenda)
@@ -55,6 +60,7 @@
         ("S" . my-current-time-stamp)
         ("u" . org-clock-update-time-maybe))
   :commands ( evil-define-key
+              org-cycle-set-startup-visibility
               org-find-exact-headline-in-buffer
               org-insert-heading-respect-content
               org-insert-structure-template
@@ -121,7 +127,8 @@
                    (directory . emacs)
                    (system . "setsid -w xdg-open %s")
                    (t . system)))
-  :defines (org-capture-templates
+  :defines (evil-normal-state-map
+            org-capture-templates
             space-org-agenda-keymap
             space-org-keymap
             space-org-table-keymap

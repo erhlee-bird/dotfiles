@@ -107,10 +107,22 @@
   (marginalia-mode))
 
 (use-package orderless
+  :config
+  (orderless-define-completion-style orderless+initialism
+    (orderless-matching-styles '(orderless-initialism
+                                 orderless-literal
+                                 orderless-regexp)))
   :custom
-  (completion-styles '(flex orderless basic))
-  (completion-category-overrides '((file (styles basic partial-completion))))
-  (matching-styles '(orderless-flex)))
+  (completion-category-defaults nil)
+  (completion-category-overrides '((buffer (styles orderless+initialism))
+                                   (command (styles orderless+initialism))
+                                   (consult-multi (styles orderless+initialism))
+                                   (file (styles orderless+initialism))
+                                   (symbol (styles orderless+initialism))
+                                   (variable (styles orderless+initialism))))
+  ;; (completion-styles '(flex orderless basic))
+  (completion-styles '(orderless))
+  (orderless-matching-styles '(orderless-literal orderless-regexp)))
 
 (use-package consult
   :after evil
@@ -121,7 +133,34 @@
 	    ("/" . consult-ripgrep))
   :custom
   (consult-preview-key 'any)
-  :defines (evil-normal-state-map space-keymap))
+  :defines (evil-ex-pattern-regex
+            evil-ex-search-direction
+            evil-ex-search-pattern
+            evil-normal-state-map
+            evil-search-module
+            space-keymap)
+  :preface
+  (defun evil-ex-pattern-regex (pattern)
+    "Return the regular expression of a search PATTERN."
+    (nth 0 pattern))
+
+  (defun consult-line-isearch-history (&rest _)
+    "Add latest `consult-line' search pattern to the isearch history.
+
+     This allows n and N to continue the search after `consult-line' exits."
+    (when (and (bound-and-true-p evil-mode)
+               (eq evil-search-module 'isearch)
+               consult--line-history)
+      (let* ((pattern (car consult--line-history))
+             (regexp (if (string-prefix-p "\\_" pattern)
+                         (substring pattern 2)
+                       pattern)))
+        (add-to-history 'regexp-search-ring regexp)
+        (setq evil-ex-search-pattern (evil-ex-pattern-regex regexp))
+        (setq evil-ex-search-direction 'forward))))
+
+  ;; Now tell consult-line to run the function after a search
+  (advice-add #'consult-line :after #'consult-line-isearch-history))
 
 (use-package corfu
   :custom
@@ -150,10 +189,10 @@
   :hook
   (prog-mode . eglot-ensure))
 
-(use-package eglot-booster
-  :straight (eglot-booster :type git :host nil :repo "https://github.com/jdtsmith/eglot-booster")
-  :after eglot
-  :config (eglot-booster-mode))
+;; (use-package eglot-booster
+;;   :straight (eglot-booster :type git :host nil :repo "https://github.com/jdtsmith/eglot-booster")
+;;   :after eglot
+;;   :config (eglot-booster-mode))
 
 (use-package eldoc
   :init
@@ -164,16 +203,16 @@
   (tab-always-indent 'complete)
   (read-extended-command-predicate #'command-completion-default-include-p))
 
-(use-package base16-theme
-  :config
-  (let ((codespaces (getenv "CODESPACES")))
-    (if (and codespaces (string= codespaces "true"))
-	    (setq base16-theme-256-color-source 'base16-shell)
-      (setq base16-theme-256-color-source 'colors)))
-  (load-theme 'base16-ocean t))
+;; (use-package base16-theme
+;;   :config
+;;   (let ((codespaces (getenv "CODESPACES")))
+;;     (if (and codespaces (string= codespaces "true"))
+;; 	    (setq base16-theme-256-color-source 'base16-shell)
+;;       (setq base16-theme-256-color-source 'colors)))
+;;   (load-theme 'base16-ocean t))
 
 (use-package rainbow-mode :diminish)
-(use-package vterm)
+(use-package vterm :defer t)
 
 ;; Load any my-prefixed custom packages first.
 
@@ -182,8 +221,6 @@
 (use-package my-display :ensure nil)
 (use-package my-format :ensure nil)
 (use-package my-mouse :ensure nil)
-                                        ; XXX: Shells break when in a direnv +
-                                        ; flake environment.
 (use-package my-shell :ensure nil)
 (use-package my-start-server :ensure nil)
 
@@ -194,8 +231,8 @@
 (setq browse-url-browser-function 'browse-url-xdg-open)
 
                                         ; Enable which-key support.
-;; (which-key-mode 1)
-;; (setq-default which-key-idle-delay 0.3)
+(which-key-mode 1)
+(setq-default which-key-idle-delay 0.5)
 
                                         ; Add Python to org-babel.
 (org-babel-do-load-languages 'org-babel-load-languages '((python . t)))
@@ -209,7 +246,7 @@
 
 (use-package init-aider :ensure nil)
 (use-package init-chatgpt :ensure nil)
-(use-package init-company :ensure nil)
+;; (use-package init-company :ensure nil)
 ;; (use-package init-erc :ensure nil)
 (use-package init-flycheck :ensure nil)
 (use-package init-github :ensure nil)
@@ -224,7 +261,7 @@
 ;; -----------------------------------------------------------------------------
 ;; Configure language-specific settings here.
 
-                                        ; Indent elisp buffers on save.
+;; Indent elisp buffers on save.
 (add-hook 'emacs-lisp-mode-hook
 	      (lambda ()
 	        (add-hook 'before-save-hook
@@ -235,6 +272,7 @@
 
 (use-package cc-mode
   :after flycheck
+  :defer t
   :defines flycheck-gcc-language-standard
   :hook
   (c++-mode . (lambda ()
