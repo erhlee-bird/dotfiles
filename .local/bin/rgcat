@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+# Usage: rgcat PATTERN [FILE/DIR]
+
+rg -l "$1" $2 | xargs -I {} sh -c 'echo -e "\e[31m{}\n===\e[0m"; cat {}; echo'

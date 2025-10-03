@@ -12,7 +12,7 @@
 
         " Vundle Plugins {
             Plugin 'VundleVim/Vundle.vim'
-            Plugin 'chriskempson/base16-vim'
+            " Plugin 'chriskempson/base16-vim'
             Plugin 'scrooloose/nerdtree'
             Plugin 'kien/ctrlp.vim'
             Plugin 'scrooloose/syntastic'
