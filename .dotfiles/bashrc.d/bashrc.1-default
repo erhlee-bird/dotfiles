@@ -1,11 +1,16 @@
 # Common system settings.
 export EDITOR=vim
-export PATH="${HOME}/.local/bin:${PATH}"
+export PATH="${HOME}/.local/bin:${PATH}:/usr/local/bin"
 export REVIEW_BASE="main"
 
 export LANG="en_US.UTF-8"
 export LANGUAGE="en_US.UTF-8"
 export LC_COLLATE="en_US.UTF-8"
+
+# Check the window size after every command.
+shopt -s checkwinsize
+# Disable hashing (i.e. caching) of command lookups.
+set +h
 
 # Elixir Tooling.
 export ERL_AFLAGS="-kernel shell_history enabled"
@@ -22,3 +27,9 @@ fi
 export GOPATH="${HOME}/.local"
 
 alias open="xdg-open"
+
+if command -v command-not-found >/dev/null; then
+  function command_not_found_handle {
+    command-not-found "$@"
+  }
+fi
