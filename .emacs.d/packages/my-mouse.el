@@ -17,9 +17,12 @@ Necessary when running emacsclient in the terminal."
 (setq mouse-wheel-follow-mouse t)
 
 ;; Set saner scrolling settings.
-(pixel-scroll-precision-mode t)
+;; https://www.emacswiki.org/emacs/SmoothScrolling
+(setq mouse-wheel-progressive-speed nil)
+(setq mouse-wheel-scroll-amount '(1))
 (setq scroll-conservatively most-positive-fixnum)
-
+;; (setq scroll-preserve-screen-position 1)
+(setq scroll-step 1)
 
 (provide 'my-mouse)
 ;;; my-mouse.el ends here

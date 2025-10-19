@@ -37,6 +37,9 @@
         if has('mouse')
             set mouse=a                   " Enable Mouse Usage
             set mousehide                 " Hide the Mouse Cursor while typing
+
+            map <ScrollWheelUp> <C-Y>
+            map <ScrollWheelDown> <C-E>
         endif
 
         if has('clipboard')
