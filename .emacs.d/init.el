@@ -194,6 +194,11 @@
 ;;   :after eglot
 ;;   :config (eglot-booster-mode))
 
+(use-package python-black
+  :demand t
+  :after python
+  :hook ((python-mode . python-black-on-save-mode)))
+
 (use-package eldoc
   :init
   (global-eldoc-mode))
@@ -234,9 +239,6 @@
 (which-key-mode 1)
 (setq-default which-key-idle-delay 0.5)
 
-                                        ; Add Python to org-babel.
-(org-babel-do-load-languages 'org-babel-load-languages '((python . t)))
-
                                         ; Ignore an annoying hardware macro that
                                         ; inputs XF86AudioPause as raw key events
 (global-set-key (kbd "<ESC>[57429u") 'ignore)
@@ -260,6 +262,11 @@
 
 ;; -----------------------------------------------------------------------------
 ;; Configure language-specific settings here.
+
+(setq-default ispell-hunspell-dict-paths-alist
+              '(("en_US" "/run/current-system/sw/share/hunspell/en_US.aff")))
+(setq-default ispell-local-dictionary "en_US")
+(setq-default ispell-program-name "hunspell")
 
 ;; Indent elisp buffers on save.
 (add-hook 'emacs-lisp-mode-hook

@@ -32,6 +32,7 @@
 (defkeymap space-org-keymap)
 (defkeymap space-org-agenda-keymap)
 (defkeymap space-org-table-keymap)
+(defkeymap space-org-tree-keymap)
 (defkeymap space-org-time-keymap)
 (defkeymap space-projectile-keymap)
 (defkeymap space-rtags-keymap)
@@ -131,7 +132,8 @@
 (make-map space-org-keymap
           '(("a" space-org-agenda-keymap)
             ("t" space-org-time-keymap)
-            ("T" space-org-table-keymap)))
+            ("T" space-org-table-keymap)
+            ("z" space-org-tree-keymap)))
 
 ;; Define vspace-keymap
 (make-map vspace-keymap

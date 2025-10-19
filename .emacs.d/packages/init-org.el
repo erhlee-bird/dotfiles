@@ -5,30 +5,54 @@
 
 (defvar-local main-org-file "refile.org")
 
+;; Track the main org file.
+(setq-default org-directory (expand-file-name "~/Documents/org"))
+;; Make default org directory.
+(unless (file-exists-p org-directory)
+  (make-directory org-directory))
+(setq-default org-agenda-files
+              (append
+               (file-expand-wildcards (expand-file-name "*.org" org-directory))
+               (file-expand-wildcards (expand-file-name "*.org" "~/.local/share/org/"))))
 (use-package org
   :after evil
   :bind
   (:map space-org-keymap
         ("A" . org-insert-heading-after-current)
         ("b" . (lambda ()
+                 "Insert an org-babel block."
                  (interactive)
-                 (org-insert-structure-template "src")))
+                 (org-insert-structure-template (completing-read "Block: " '("src" "example" "quote")))))
         ("c" . org-capture)
         ("e" . org-export-dispatch)
-        ("f" . org-switchb)
+        ("f" . (lambda ()
+                 "Switch to an agenda file."
+                 (interactive)
+                 ;; Also add any open buffer with a .org suffix to the
+                 ;; completing-read options.
+                 (let ((choices (append org-agenda-files
+                                        (mapcar #'buffer-file-name
+                                                (cl-remove-if-not
+                                                 (lambda (buf)
+                                                   (and (buffer-file-name buf)
+                                                        (string-suffix-p ".org" (buffer-file-name buf))))
+                                                 (buffer-list))))))
+                   (find-file (completing-read "Choose agenda file: " choices)))))
         ("i" . org-insert-heading)
         ("I" . org-insert-heading-respect-content)
-        ("l" . org-latex-export-to-pdf)
+        ("j" . org-next-visible-heading)
+        ("k" . org-previous-visible-heading)
         ("L" . org-toggle-link-display)
         ("o" . org-open-at-point)
         ("O" . my-org-open-at-point)
-        ("p" . org-insert-link)
+        ("p" . (lambda ()
+                 "Insert an org link after appending a space."
+                 (interactive)
+                 (forward-char)
+                 (insert-char ?\s)
+                 (org-insert-link)))
         ("r" . org-refile)
         ;; Bind tag search and corresponding open all headings keybindings.
-        ("t" . org-tags-sparse-tree)
-        ("T" . (lambda ()
-                 (interactive)
-                 (org-cycle-set-startup-visibility)))
         ("s" . org-store-link)
         ("v" . org-cycle)
         ("V" . org-global-cycle)
@@ -37,11 +61,7 @@
         ("DEL" . org-mark-ring-goto)
         :map space-org-agenda-keymap
         ("A" . org-agenda)
-        ("e" . org-edit-agenda-file-list)
-        ("f" . org-cycle-agenda-files)
         ("j" . journal-to-today)
-        ("n" . org-agenda-file-to-front)
-        ("N" . org-remove-file)
         ("t" . org-todo)
         :map space-org-table-keymap
         ("a" . org-table-align)
@@ -51,6 +71,15 @@
         ("N" . org-table-next-row)
         ("0" . org-table-beginning-of-field)
         ("$" . org-table-end-of-field)
+        :map space-org-tree-keymap
+        ("J" . org-move-subtree-up)
+        ("K" . org-move-subtree-down)
+        ("t" . org-tags-sparse-tree)
+        ("T" . (lambda ()
+                 (interactive)
+                 (org-cycle-set-startup-visibility)))
+        ("z" . org-narrow-to-subtree)
+        ("Z" . widen)
         :map space-org-time-keymap
         ("c" . org-clock-in)
         ("C" . org-clock-out)
@@ -60,21 +89,17 @@
         ("S" . my-current-time-stamp)
         ("u" . org-clock-update-time-maybe))
   :commands ( evil-define-key
+              org-current-level
               org-cycle-set-startup-visibility
+              org-end-of-subtree
               org-find-exact-headline-in-buffer
               org-insert-heading-respect-content
               org-insert-structure-template
               org-insert-subheading
-              org-open-at-point)
+              org-open-at-point
+              org-promote-subtree)
   :config
-  ;; Make default org directory.
-  (unless (file-exists-p org-directory)
-    (make-directory org-directory))
-  (unless (not (null org-agenda-files))
-    (setq org-agenda-files (cons org-default-notes-file nil)))
   (evil-define-key 'normal org-mode-map
-    (kbd "a") space-org-agenda-keymap
-    (kbd "t") space-org-time-keymap
     (kbd "RET") 'org-return-indent
     (kbd "TAB") 'org-cycle
     (kbd "M-TAB") 'org-global-cycle
@@ -82,19 +107,7 @@
     (kbd ">") 'org-metaright
     (kbd "<") 'org-metaleft)
   :custom
-  (org-directory (expand-file-name "~/.emacs.d/org"))
-  ;; Track the main org file.
-  (org-default-notes-file (org-dir-join main-org-file))
-  ;; Hide leading stars.
-  (org-hide-leading-stars t)
-  ;; Have org-mode indent to the heading level.
-  (org-startup-indented t)
-  ;; Org follows links on ret.
-  (org-return-follows-link t)
-  ;; Set the TODO sequence.
-  (org-todo-keywords '((sequence "TODO(t)" "DOING(d)" "|" "DONE(x)")))
-  ;; Refile targets
-  (org-refile-targets '((org-agenda-files :maxlevel . 4)))
+  (org-babel-min-lines-for-block-output 1)
   ;; Capture templates.
   (org-capture-templates
    `(("t"              ; hotkey
@@ -119,6 +132,7 @@
                                         ; template
       "%? file:%F::%(with-current-buffer (org-capture-get :original-buffer) (number-to-string (line-number-at-pos)))\n")
      ))
+  (org-default-notes-file (org-dir-join main-org-file))
   ;; Show time in hours as a float rather than in time.
   (org-duration-format '(("h" . t) (special . 2)))
   ;; Default to xdg-open for opening files externally.
@@ -127,18 +141,39 @@
                    (directory . emacs)
                    (system . "setsid -w xdg-open %s")
                    (t . system)))
+  ;; Hide leading stars.
+  (org-hide-leading-stars t)
+  ;; Track when a TODO item was marked as done.
+  (org-log-done 'time)
+  ;; Log state changes into a LOGBOOK drawer.
+  (org-log-into-drawer t)
+  ;; Refile targets
+  (org-refile-targets '((org-agenda-files :maxlevel . 4)))
+  ;; Org follows links on ret.
+  (org-return-follows-link t)
+  ;; Have org-mode indent to the heading level.
+  (org-startup-indented nil)
+  ;; Set the TODO sequence.
+  (org-todo-keyword-faces
+   '(("TODO" . org-warning)
+     ("STARTED" . "yellow")
+     ("CANCELED" . "grey")))
+  (org-todo-keywords
+   '((sequence "TODO(t!)" "STARTED(s!)" "|" "CANCELED(c!)" "DONE(x!)")))
   :defines (evil-normal-state-map
             org-capture-templates
             space-org-agenda-keymap
             space-org-keymap
             space-org-table-keymap
+            space-org-tree-keymap
             space-org-time-keymap)
   :hook
   (org-mode . auto-fill-mode)
   ;; Load babel functionality.
   (org-mode . (lambda ()
                 (org-babel-do-load-languages
-                 'org-babel-load-languages '((shell . t)))))
+                 'org-babel-load-languages '((python . t)
+                                             (shell . t)))))
   :preface
   (defun org-dir-join (file-name)
     "Get the org file path for FILE-NAME in the org-directory."
@@ -165,13 +200,14 @@
       (goto-char (org-find-exact-headline-in-buffer top-headline))
       (if (not (org-find-exact-headline-in-buffer today-headline))
           (progn
+            (org-end-of-subtree)
             (end-of-line)
             (org-insert-subheading nil)
             (insert today-headline)
-            (kill-whole-line)
-            (goto-char (point-max))
-            (newline)
-            (yank))
+            (let ((current-level (org-current-level)))
+              (while (> current-level 2)
+                (org-promote-subtree)
+                (setq current-level (org-current-level)))))
         (progn
           (goto-char (org-find-exact-headline-in-buffer today-headline))
           (end-of-line)))))
@@ -180,6 +216,10 @@
     (interactive)
     (let ((current-prefix-arg '(16))) ;; simulate C-u C-u
       (call-interactively #'org-open-at-point))))
+
+;; Enable highlighting code blocks in HTML exports.
+(use-package htmlize
+  :after org)
 
 (provide 'init-org)
 ;;; init-org.el ends here
