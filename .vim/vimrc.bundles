@@ -45,6 +45,8 @@
                     \ '\.(o|dep)$' .
                     \ ')'
             \ }
+        " Default to regexp mode
+        let g:ctrlp_regexp=1
 
         nnoremap <Leader>b :CtrlPBuffer<CR>
         nnoremap <Leader>m :CtrlPMRUFiles<CR>
