@@ -1,11 +1,47 @@
-;;; init.el --- erhlee.bird's emacs init file.
+;;; init.el --- erhlee.bird's emacs init file. -*- lexical-binding: t; -*-
 ;;; Commentary:
 
 ;;; Code:
 
-;; Separate customize settings.
+(setq
+ auto-save-default nil
+ backup-by-copying t
+ backup-directory-alist `(("." . "~/.emacs.d/saves"))
+ buffer-file-coding-system 'utf-8-unix
+ completions-detailed t
+ confirm-kill-processes nil
+ create-lockfiles nil
+ gc-cons-threshold (* 1024 1024 100)
+ help-window-select t
+ indent-tabs-mode nil
+ inhibit-startup-screen 1
+ initial-scratch-message nil
+ load-prefer-newer t
+ make-backup-files nil
+ mouse-wheel-tilt-scroll t
+ next-error-message-highlight t
+ read-minibuffer-restore-windows t
+ read-process-output-max (* 1024 1024)
+ require-final-newline t
+ ring-bell-function 'ignore
+ use-short-answers t
+ vc-follow-symlinks t)
+(setq-default
+ executable-prefix-env t)
+
+(add-hook 'after-save-hook #'executable-make-buffer-file-executable-if-script-p)
+(add-hook 'before-save-hook #'delete-trailing-whitespace)
+
+                                        ; UTF-8 default.
+(set-charset-priority 'unicode)
+(prefer-coding-system 'utf-8-unix)
+
+                                        ; Separate customize settings.
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file 'noerror)
+
+                                        ; Reload automatically from disk.
+(global-auto-revert-mode t)
 
 (require 'warnings)
 (setq warning-minimum-level :error)
@@ -15,6 +51,7 @@
 
 (require 'package)
 (setq package-enable-at-startup nil)
+(setq package-native-compile t)
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("gnu" . "https://elpa.gnu.org/packages/")))
 (when (< emacs-major-version 27)
@@ -22,17 +59,16 @@
 
                                         ; Bootstrap use-package.
 (unless (package-installed-p 'use-package)
+  (setq-default use-package-always-ensure t)
   (package-refresh-contents)
   (package-install 'use-package))
 (eval-when-compile
   (require 'use-package))
 
-                                        ; Add a check for an environment variable
-                                        ; `LOAD` before setting this value.
-(when (getenv "ENSURE")
-  (setq use-package-always-ensure t))
-
-(use-package diminish :ensure t)
+(use-package diminish
+  :ensure t
+  :config
+  (diminish 'visual-line-mode))
 
                                         ; Automatically upgrade packages.
 (use-package auto-package-update
@@ -132,7 +168,9 @@
 	    :map space-keymap
 	    ("/" . consult-ripgrep))
   :custom
-  (consult-preview-key 'any)
+  (consult-preview-key '(:debounce 0.25 any))
+  (xref-show-definitions-function #'consult-xref)
+  (xref-show-xrefs-function #'consult-xref)
   :defines (evil-ex-pattern-regex
             evil-ex-search-direction
             evil-ex-search-pattern
@@ -184,7 +222,13 @@
         ("SPC" . eglot-code-actions)
         ("f" . eglot-format)
         ("d" . xref-find-definitions)
+        ("r" . xref-find-references)
         ("x" . xref-go-back))
+  :config
+  (add-to-list 'eglot-server-programs '(elixir-mode "elixir-ls"))
+  :custom
+  (eglot-autoshutdown t)
+  (eglot-send-changes-idle-time 0.1)
   :defines space-ide-keymap
   :hook
   (prog-mode . eglot-ensure))
@@ -200,6 +244,13 @@
   :hook ((python-mode . python-black-on-save-mode)))
 
 (use-package eldoc
+  :bind
+  (:map space-ide-keymap
+        ("D" . eldoc))
+  :custom
+  (eldoc-echo-area-prefer-doc-buffer t)
+  (eldoc-echo-area-use-multiline-p t)
+  :diminish
   :init
   (global-eldoc-mode))
 
@@ -208,20 +259,11 @@
   (tab-always-indent 'complete)
   (read-extended-command-predicate #'command-completion-default-include-p))
 
-;; (use-package base16-theme
-;;   :config
-;;   (let ((codespaces (getenv "CODESPACES")))
-;;     (if (and codespaces (string= codespaces "true"))
-;; 	    (setq base16-theme-256-color-source 'base16-shell)
-;;       (setq base16-theme-256-color-source 'colors)))
-;;   (load-theme 'base16-ocean t))
-
 (use-package rainbow-mode :diminish)
 (use-package vterm :defer t)
 
 ;; Load any my-prefixed custom packages first.
 
-(use-package my-backup :ensure nil)
 (use-package my-clipboard :ensure nil)
 (use-package my-display :ensure nil)
 (use-package my-format :ensure nil)
@@ -248,8 +290,6 @@
 
 (use-package init-aider :ensure nil)
 (use-package init-chatgpt :ensure nil)
-;; (use-package init-company :ensure nil)
-;; (use-package init-erc :ensure nil)
 (use-package init-flycheck :ensure nil)
 (use-package init-github :ensure nil)
 ;; (use-package init-ivy :ensure nil)

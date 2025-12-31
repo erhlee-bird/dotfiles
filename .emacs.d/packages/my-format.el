@@ -6,7 +6,7 @@
 
 ;;; Code:
 
-;; Indentation
+                                        ; Indentation
 (setq-default buffer-file-coding-system 'utf-8-unix
               indent-tabs-mode nil
               c-default-style "k&r"
@@ -36,6 +36,8 @@
   :init
   (global-whitespace-mode t))
 
+(use-package all-the-icons)
+
 ;; Enable unicode rendering.
 (use-package unicode-fonts
   :hook (after-init . unicode-fonts-setup))
@@ -51,11 +53,19 @@
   (web-mode-css-indent-offset 2)
   (web-mode-code-indent-offset 2))
 
-(use-package doom-modeline
-  :ensure t
+;; Pick a modeline.
+
+;; (use-package doom-modeline
+;;   :ensure t
+;;   :custom
+;;   (doom-modeline-support-imenu t)
+;;   :hook after-init)
+
+(use-package mood-line
+  :config
+  (mood-line-mode)
   :custom
-  (doom-modeline-support-imenu t)
-  :hook after-init)
+  (mood-line-glyph-alist mood-line-glyphs-unicode))
 
 (use-package my-keybindings
   :after whitespace

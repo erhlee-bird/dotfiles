@@ -74,6 +74,7 @@
         :map space-org-tree-keymap
         ("J" . org-move-subtree-up)
         ("K" . org-move-subtree-down)
+        ("s" . org-sort-entries)
         ("t" . org-tags-sparse-tree)
         ("T" . (lambda ()
                  (interactive)

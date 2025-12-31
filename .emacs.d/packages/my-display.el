@@ -6,8 +6,6 @@
 
 ;;; Code:
 
-(setq inhibit-startup-screen 1)
-(setq initial-scratch-message nil)
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (and (boundp 'scroll-bar-mode)
