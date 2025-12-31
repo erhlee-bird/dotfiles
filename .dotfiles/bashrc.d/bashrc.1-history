@@ -2,8 +2,11 @@
 export HISTCONTROL=ignoreboth:erasedups
 
 # Control the history size.
-export HISTSIZE=10000
-export HISTFILESIZE=50000
+# https://stackoverflow.com/questions/9457233/unlimited-bash-history
+export HISTSIZE=
+export HISTFILESIZE=
+export HISTTIMEFORMAT="[%F %T]"
+export HISTFILE=~/.my_bash_history
 
 # Append history entries.
 shopt -s histappend
