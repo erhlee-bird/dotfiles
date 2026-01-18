@@ -12,10 +12,10 @@
 
         " Vundle Plugins {
             Plugin 'VundleVim/Vundle.vim'
-            " Plugin 'chriskempson/base16-vim'
-            Plugin 'scrooloose/nerdtree'
-            Plugin 'kien/ctrlp.vim'
             Plugin 'scrooloose/syntastic'
+            Plugin 'junegunn/fzf'
+            Plugin 'junegunn/fzf.vim'
+            Plugin 'tpope/vim-commentary'
         " }
 
         call vundle#end()
@@ -163,13 +163,34 @@
 
     " Keybindings {"{{{
         " Reassign mapleader
-        let mapleader=','
+        nnoremap <Space> <Nop>
+        let mapleader=" "
+
+        noremap <Leader><Space> :Buffers!<CR>
+        noremap <Leader>f :GFiles!<CR>
+        noremap <Leader>w :w<CR>
+        noremap <Leader>x :q<CR>
+        noremap <Leader>/ :Rg!<CR>
+        noremap <Leader>; gcc
+
+        " Easier split navigation
+        noremap <Leader>v :vsp<CR>
+        noremap <Leader>V :sp<CR>
+        noremap <Leader>h <C-w>h
+        noremap <Leader>j <C-w>j
+        noremap <Leader>k <C-w>k
+        noremap <Leader>l <C-w>l
+        noremap <Leader>H <C-w>H
+        noremap <Leader>J <C-w>J
+        noremap <Leader>K <C-w>K
+        noremap <Leader>L <C-w>L
 
         " Switch to last buffer
-        noremap <Leader><Leader> <C-^>
+        noremap <Left> :bp<CR>
+        noremap <Right> :bn<CR>
 
         " Clear search highlights
-        noremap <silent><Leader>/ :noh<CR>
+        noremap <silent><Leader>? :noh<CR>
 
         " Save with root permissions
         cabbrev w!! %!sudo tee > /dev/null %
@@ -182,22 +203,12 @@
         map Y y$
 
         " Reselect visual blocks after indent/outdent
-        vnoremap <S-Tab> <gv
-        vnoremap <Tab> >gv
+        " vnoremap <S-Tab> <gv
+        " vnoremap <Tab> >gv
 
         " Space toggles folds
-        nnoremap <Space> za
-        vnoremap <Space> za
-
-        " Easier split navigation
-        noremap <Up> <C-W>k
-        noremap <Down> <C-W>j
-        noremap <Right> <C-W>l
-        noremap <Left> <C-W>h
-        noremap <C-Up> <C-W><S-K>
-        noremap <C-Down> <C-W><S-J>
-        noremap <C-Right> <C-W><S-L>
-        noremap <C-Left> <C-W><S-H>
+        " nnoremap <Space> za
+        " vnoremap <Space> za
 
         " Swap lines up and down
         noremap <C-K> :m-2<CR>
@@ -207,13 +218,8 @@
         vnoremap <C-K> :m-2<CR>gv
         vnoremap <C-J> :m'>+<CR>gv
 
-        " Split lines
-        nnoremap <Leader>j gEa<CR><ESC>ew
-
-        nnoremap <Leader>c :bp<CR>:bd #<CR>
-
         " Toggle between relative and absolute numbering
-        nnoremap <Leader>l :set relativenumber!<CR>
+        " nnoremap <Leader>l :set relativenumber!<CR>
 
         " Keep search centered
         nnoremap <silent> n nzz
