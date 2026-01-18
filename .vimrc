@@ -166,8 +166,9 @@
         nnoremap <Space> <Nop>
         let mapleader=" "
 
-        noremap <Leader><Space> :Buffers!<CR>
-        noremap <Leader>f :GFiles!<CR>
+        noremap <Leader><Space> :GFiles!<CR>
+        noremap <Leader>b :Buffers!<CR>
+        noremap <Leader>f :Files!<CR>
         noremap <Leader>w :w<CR>
         noremap <Leader>x :q<CR>
         noremap <Leader>/ :Rg!<CR>
